@@ -1,9 +1,9 @@
 #summary Phase I: Analysis & Specification.
 
-= Assignment Requirements =
-  * List of group members (mark clearly on the title page in alphabetical order by Last Name, include section and email of each member),
-  * Information Flow Diagram, 
-  * E-R Diagram, 
+= Deliverables =
+  * List of group members (mark clearly on the title page in alphabetical order by Last Name, include section and email of each member)
+  * Information Flow Diagram
+  * E-R Diagram
   * Task Decomposition (where appropriate) 
   * Additional note, if necessary, about any assumptions
   * Useful Link for Phase I: http://www.cc.gatech.edu/classes/AY2007/cs4400_spring/methodologyFall2002.ppt
