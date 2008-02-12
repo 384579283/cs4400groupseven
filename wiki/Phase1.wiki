@@ -1,4 +1,4 @@
-# Phase I: Analysis & Specification
+#summary Phase I: Analysis & Specification.
 
 = Assignment Requirements =
   * List of group members (mark clearly on the title page in alphabetical order by Last Name, include section and email of each member),
