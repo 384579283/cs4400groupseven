@@ -6,5 +6,4 @@
   * E-R Diagram, 
   * Task Decomposition (where appropriate) 
   * Additional note, if necessary, about any assumptions
-  * Useful Link for Phase I:
-http://www.cc.gatech.edu/classes/AY2007/cs4400_spring/methodologyFall2002.ppt
+  * Useful Link for Phase I: http://www.cc.gatech.edu/classes/AY2007/cs4400_spring/methodologyFall2002.ppt
