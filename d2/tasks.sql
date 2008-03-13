@@ -8,16 +8,17 @@
      AND  U.PASSWORD = '<password>';
 
 -- Create applicant account
-  INSERT  INTO CAREER_USER (USER_ID, PASSWORD)
-          VALUES  ('<id>', '<password>');
-  INSERT  INTO  CUSTOMER (USER_ID, EMAIL, NAME, DESCRIPTION, PHONE)
-          VALUES  ('<id>', '<email>', '<name>', '<description>', '<phone>');
+  INSERT  INTO  CUSTOMER (USER_ID, PASSWORd, EMAIL, NAME,
+                DESCRIPTION, PHONE)
+          VALUES  ('<id>', '<password>', '<email>', '<name>',
+                   '<description>', '<phone>');
+
+-- Add applicant profile
   INSERT  INTO APPLICANT (USER_ID, HIGHEST_DEGREE, YEARS_EXPERIENCE,
                           CITIZENSHIP, BIRTH_YEAR)
           VALUES  ('<id>', '<degree>', '<years_experience>',
                    '<citizenship>', '<birth_year>');
 
--- Add applicant profile
 -- Search for jobs
 -- Show job details
 -- Apply
