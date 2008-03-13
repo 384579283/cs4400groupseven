@@ -20,6 +20,19 @@
                    '<citizenship>', '<birth_year>');
 
 -- Search for jobs
+  SELECT  J.TITLE,
+          R.COMPANY_NAME AS EMPLOYER,
+          J.POSITION_TYPE,
+          J.INDUSTRY,
+          J.MINIMUM_SALARY
+    FROM  JOB J,
+          RECRUITER R
+   WHERE  J.POSTED_BY = R.USER_ID
+     AND  J.POSITION_TYPE = '<position_type>'
+     AND  J.INDUSTRY = '<industry>',
+     AND  J.TITLE LIKE '%<keyword_1>%<keyword_2>%',
+     AND  J.MINIMUM_SALARY >= '<minimum_salary>';
+
 -- Show job details
 -- Apply
 -- Show company details
