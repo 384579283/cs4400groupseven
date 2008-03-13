@@ -1,7 +1,10 @@
 -- Applicant login
   SELECT  COUNT(*) AS SUCCESS
-    FROM  USER U, APPLICANT A
+    FROM  CAREER_USER U,
+          CUSTOMER C,
+          APPLICANT A
    WHERE  U.USER_ID = A.USER_ID
+     AND  C.EMAIL = '<email>'
      AND  U.PASSWORD = '<password>';
 
 -- Create applicant account
