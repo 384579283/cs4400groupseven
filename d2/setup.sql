@@ -21,12 +21,11 @@ CREATE TABLE INDUSTRY_LU (
 
 -- Populate industry lookup table
 INSERT INTO INDUSTRY_LU (ID, NAME)
-  VALUES (1, 'All Areas'),
-         (2, 'Accounting'),
-         (3, 'Computers'),
-         (4, 'Education'),
-         (5, 'Fashion'),
-         (6, 'Insurance');
+  VALUES (1, 'Accounting'),
+         (2, 'Computers'),
+         (3, 'Education'),
+         (4, 'Fashion'),
+         (5, 'Insurance');
 
 -- Create degree lookup table
 CREATE TABLE DEGREE_LU (
@@ -66,12 +65,11 @@ CREATE TABLE TEST_TYPE_LU (
 
 -- Populate test type lookup table
 INSERT INTO TEST_TYPE_LU (ID, NAME)
-  VALUES (1, 'No test'),
-         (2, 'GRE'),
-         (3, 'GMAT'),
-         (4, 'MCAT'),
-         (5, 'STAR'),
-         (6, 'CERT');
+  VALUES (1, 'GRE'),
+         (2, 'GMAT'),
+         (3, 'MCAT'),
+         (4, 'STAR'),
+         (5, 'CERT');
 
 -- Create user table
 CREATE TABLE CAREER_USER (
@@ -93,7 +91,7 @@ CREATE TABLE CUSTOMER (
   USER_ID      INT           NOT NULL,
   EMAIL        VARCHAR(220)  NOT NULL,
   NAME         VARCHAR(255)  NOT NULL,
-  DESCRIPTION  VARCHAR(500)  NOT NULL,
+  DESCRIPTION  VARCHAR(500),
   PHONE        CHAR(10),
   PRIMARY KEY(USER_ID),
   FOREIGN KEY(USER_ID)      REFERENCES CAREER_USER(USER_ID)
@@ -114,10 +112,10 @@ CREATE TABLE RECRUITER (
 -- Create applicant table
 CREATE TABLE APPLICANT (
   USER_ID           INT           NOT NULL,
-  HIGHEST_DEGREE    INT           NOT NULL,
-  YEARS_EXPERIENCE  INT           NOT NULL,
-  CITIZENSHIP       VARCHAR(255)  NOT NULL,
-  BIRTH_YEAR        INT           NOT NULL,
+  HIGHEST_DEGREE    INT,
+  YEARS_EXPERIENCE  INT,
+  CITIZENSHIP       VARCHAR(255),
+  BIRTH_YEAR        INT,
   PRIMARY KEY(USER_ID),
   FOREIGN KEY(USER_ID)        REFERENCES CAREER_USER(USER_ID)
                               ON DELETE CASCADE ON UPATE CASCADE,
@@ -146,16 +144,16 @@ CREATE TABLE JOB (
   POSTED_BY        INT           NOT NULL,
   POST_DATE        DATE          NOT NULL,
   TITLE            VARCHAR(255)  NOT NULL,
-  DESCRIPTION      VARCHAR(500)  NOT NULL,
+  DESCRIPTION      VARCHAR(500),
   POSITION_TYPE    INT           NOT NULL,     
-  INDUSTRY         INT           NOT NULL,
+  INDUSTRY         INT,
   MINIMUM_SALARY   INT           NOT NULL,
-  TEST_TYPE        INT           NOT NULL,
-  MIN_TEST_SCORE   INT           NOT NULL,
+  TEST_TYPE        INT,
+  MIN_TEST_SCORE   INT,
   EMAIL            VARCHAR(220)  NOT NULL,
   PHONE            CHAR(10)      NOT NULL,
-  FAX              CHAR(10)      NOT NULL,
-  NUM_POSITIONS    INT           NOT NULL,
+  FAX              CHAR(10),
+  NUM_POSITIONS    INT,
   PRIMARY KEY(JOB_ID),
   FOREIGN KEY(POSITION_TYPE) REFERENCES POSITION_TYPE_LU(ID),
   FOREIGN KEY(INDUSTRY)      REFERENCES INDUSTRY_LU(ID),
