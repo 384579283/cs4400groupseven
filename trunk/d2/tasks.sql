@@ -122,43 +122,68 @@
    WHERE  USER_ID = '<applicantId>';
 
 -- Show jobs status
-  SELECT  JOB_ID,
-          TITLE,
+  SELECT  J.JOB_ID,
+          J.TITLE,
           --# waiting for tests
-          (SELECT COUNT(*)
-            FROM  APPLICATION 
-           WHERE  A.JOB_ID = J.JOB_ID
-                  AND  A.STATUS = (SELECT DISTINCT ID
-                                    FROM  APPLICATION_STATUS_LU
-                                   WHERE  UPPER(NAME) LIKE '%TEST%')) AS WAITING_FOR_TESTS,
+          (  SELECT COUNT(*)
+              FROM  APPLICATION 
+             WHERE  A.JOB_ID = J.JOB_ID
+                    AND  A.STATUS = (  SELECT DISTINCT ID
+                                        FROM  APPLICATION_STATUS_LU
+                                       WHERE  UPPER(NAME) LIKE '%TEST%')) AS WAITING_FOR_TESTS,
           -- # waiting for interviews,
-          (SELECT COUNT(*)
-            FROM  APPLICATION 
-           WHERE  A.JOB_ID = J.JOB_ID
-                  AND  A.STATUS = (SELECT DISTINCT ID
-                                    FROM  APPLICATION_STATUS_LU
-                                   WHERE  UPPER(NAME) LIKE '%INTERVIEW%')) AS WAITING_FOR_INTERVIEWS,
+          (  SELECT COUNT(*)
+              FROM  APPLICATION 
+             WHERE  A.JOB_ID = J.JOB_ID
+                    AND  A.STATUS = (  SELECT DISTINCT ID
+                                        FROM  APPLICATION_STATUS_LU
+                                       WHERE  UPPER(NAME) LIKE '%INTERVIEW%')) AS WAITING_FOR_INTERVIEWS,
           --# waiting for decisions,
-          (SELECT COUNT(*)
-            FROM  APPLICATION 
-           WHERE  A.JOB_ID = J.JOB_ID
-                  AND  A.STATUS = (SELECT DISTINCT ID
-                                    FROM  APPLICATION_STATUS_LU
-                                   WHERE  UPPER(NAME) LIKE '%DECISION%')) AS WAITING_FOR_DECISIONS,
+          (  SELECT COUNT(*)
+              FROM  APPLICATION 
+             WHERE  A.JOB_ID = J.JOB_ID
+                    AND  A.STATUS = (  SELECT DISTINCT ID
+                                        FROM  APPLICATION_STATUS_LU
+                                       WHERE  UPPER(NAME) LIKE '%DECISION%')) AS WAITING_FOR_DECISIONS,
           --# positions filled
-          (SELECT COUNT(*)
-            FROM  APPLICATION 
-           WHERE  A.JOB_ID = J.JOB_ID
-                  AND  A.STATUS = (SELECT DISTINCT ID
-                                    FROM  APPLICATION_STATUS_LU
-                                   WHERE  UPPER(NAME) LIKE '%ACCEPTED%')) AS POSITIONS_FILLED,
-          NUM_POSITIONS,
-          POST_DATE
+          (  SELECT COUNT(*)
+              FROM  APPLICATION 
+             WHERE  A.JOB_ID = J.JOB_ID
+                    AND  A.STATUS = (  SELECT DISTINCT ID
+                                        FROM  APPLICATION_STATUS_LU
+                                       WHERE  UPPER(NAME) LIKE '%ACCEPTED%')) AS POSITIONS_FILLED,
+          J.NUM_POSITIONS,
+          J.POST_DATE
     FROM  JOB J;
 -- Show applications status
-
--- Update scores
+  SELECT  A.APPLICATION_ID,
+          --name
+          (  SELECT NAME
+              FROM  APPLICANT B
+             WHERE  B.APPLICANT_ID = A.APPLICANT_ID) AS NAME,
+          --status
+          (  SELECT NAME
+              FROM  APPLICATION_STATUS_LU L
+             WHERE  L.ID = (  SELECT STATUS
+                               FROM  APPLICANT C
+                              WHERE  C.APPLICANT_ID = A.APPLICANT_ID)) AS STATUS,
+          TEST_SCORE
+    FROM  APPLICATION A;
+-- Update score
+  UPDATE  APPLICATION
+     SET  TEST_SCORE='<score>'
+   WHERE  APPLICANT_ID='<applicantId>';
 -- Post new job
+  INSERT  INTO JOB (JOB_ID, POSTED_BY, POST_DATE,
+                    TITLE, DESCRIPTION, POSITION_TYPE,
+                    INDUSTRY, MINIMUM_SALARY, TEST_TYPE,
+                    MIN_TEST_SCORE, EMAIL, PHONE, FAX, 
+                    NUM_POSITIONS)
+          VALUES ('<jobId>', '<postedBy>', '<postDate>',
+                  '<title>', '<description>', '<positionType>',
+                  '<industry>', '<minimumSalary>', '<testType>',
+                  '<minTestScore>', '<email>', '<phone>', '<fax>',
+                  '<numPositions>');
 -- Search for applicants
 -- Show applicant's detail
 -- Admin login
