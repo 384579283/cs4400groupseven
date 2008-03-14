@@ -6,7 +6,7 @@
      AND  C.EMAIL = '<email>'
      AND  C.PASSWORD = '<password>';
 
--- Create applicant account
+-- Create customer account
   INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)
           VALUES  ('<id>', '<password>', '<email>', '<name>');
 
@@ -15,6 +15,16 @@
                           CITIZENSHIP, BIRTH_YEAR, DESCRIPTION)
           VALUES  ('<id>', '<phone>', '<degree>', '<yearsExperience>',
                    '<citizenship>', '<birthYear>', '<description>');
+
+-- Edit applicant profile
+  UPDATE  APPLICANT
+     SET  PHONE = '<phone>',
+          HIGHEST_DEGREE = '<highestDegree>',
+          YEARS_EXPERIENCE = '<yearsExperience>',
+          CITIZENSHIP = '<citizenship>',
+          BIRTH_YEAR = '<birthYear>',
+          DESCRIPTION = '<description>'
+   WHERE  USER_ID = '<applicantId>';
 
 -- Search for jobs
   SELECT  J.TITLE,
@@ -87,16 +97,6 @@
      AND  A.APPLICANT_ID = '<applicantId>'
      AND  A.CLOSE_DATE = NULL;
 
--- Applicant profile update
-  UPDATE  APPLICANT
-     SET  PHONE = '<phone>',
-          HIGHEST_DEGREE = '<highestDegree>',
-          YEARS_EXPERIENCE = '<yearsExperience>',
-          CITIZENSHIP = '<citizenship>',
-          BIRTH_YEAR = '<birthYear>',
-          DESCRIPTION = '<description>'
-   WHERE  USER_ID = '<applicantId>';
-
 -- Recruiter login
   SELECT  COUNT(*) AS SUCCESS
     FROM  CUSTOMER C,
@@ -106,8 +106,20 @@
      AND  C.PASSWORD = '<password>';
 
 -- Create recruiter account
+  INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)
+          VALUES  ('<id>', '<password>', '<email>', '<name>');
+  INSERT  INTO RECRUITER (USER_ID, COMPANY_NAME, PHONE, FAX,
+                          WEBSITE, DESCRIPTION)
+          VALUES  ('<id>', '<companyName>', '<phone>', '<fax>',
+                   '<website>', '<description>');
 
-
+-- Recruiter profile update (phone, fax, website, description)
+  UPDATE  RECRUITER
+     SET  PHONE = '<phone>',
+          FAX = '<fax>',
+          WEBSITE = '<website>',
+          DESCRIPTION = '<description>'
+   WHERE  USER_ID = '<applicantId>';
 
 -- Show jobs status
 -- Show applications status
@@ -115,7 +127,6 @@
 -- Post new job
 -- Search for applicants
 -- Show applicant's detail
--- Recruiter profile update
 -- Admin login
 -- Show report by industry
 -- Show report by salary
