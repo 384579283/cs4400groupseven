@@ -218,12 +218,5 @@
 
 
 
-
-
-
-
-
-
-
 -- Show report by salary
 
