@@ -38,7 +38,7 @@ function doQuery($query) {
 
 function verify_applicant_login($email, $password) {
 
-    $result = doQuery("
+    $result = doQuery(sprintf("
           SELECT  COUNT(*) AS SUCCESS
             FROM  CUSTOMER C,
                   APPLICANT A
@@ -47,7 +47,7 @@ function verify_applicant_login($email, $password) {
              AND  C.PASSWORD = '%s';",
         mysql_real_escape_string($email),
         mysql_real_escape_string($password)
-    );
+    ));
 
     $row = mysql_fetch_assoc($result);
 
