@@ -14,21 +14,19 @@
       <tr>
         <td class="box">
           <h2><a href="applicant_login.php">Applicant</a></h2>
-          <ul>
-            <li>Put your profile</li>
-            <li>Search/Apply for jobs</li>
-            <li>Check application status</li>
-          </ul>
+          <br />
+          <p>Update your profile</p>
+          <p>Search/Apply for jobs</p>
+          <p>Check application status</p>
         </td>
         <td class="middleSpace">
         </td>
         <td class="box">
           <h2><a href="recruiter_login.php">Recruiter</a></h2>
-          <ul>
-            <li>Post jobs</li>
-            <li>Search for applicants</li>
-            <li>Check jobs status</li>
-          </ul>
+          <br />
+          <p>Post jobs</p>
+          <p>Search for applicants</p>
+          <p>Check jobs status</p>
         </td>
       </tr>
     </table>

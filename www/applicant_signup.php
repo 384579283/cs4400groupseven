@@ -1,4 +1,11 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+
+<?php
+
+require_once('db.php');
+
+?>
+
 <html>
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -61,6 +68,12 @@
         </td>
         <td>
           <select>
+          <? foreach ($db->lookup_degree() as $id => $name) { ?>
+            <option value="<? echo "$id"; ?>">
+              <? echo $name; ?>
+            </option>
+          <? } ?>
+            <option value="" selected="selected"></option>
           </select>
         </td>
       </tr>
@@ -71,12 +84,11 @@
         <td>
           <select>
           <? for ($i = date("Y") - 123; $i <= date("Y"); $i++) { ?>
-            <option value="<? echo $i ?>"<?
-                if ($i == date("Y")) { echo ' selected="selected"'; }
-              ?>>
+            <option value="<? echo $i ?>">
               <? echo $i ?>
             </option>
           <? } ?>
+            <option value="" selected="selected"></option>
           </select>
         </td>
       </tr>
@@ -86,6 +98,12 @@
         </td>
         <td>
           <select>
+          <? for ($i = 80; $i >= 0; $i--) { ?>
+            <option value="<? echo $i ?>">
+              <? echo $i ?>
+            </option>
+          <? } ?>
+            <option value="" selected="selected"></option>
           </select>
         </td>
       </tr>
@@ -95,6 +113,12 @@
         </td>
         <td>
           <select>
+          <? foreach ($db->lookup_citizenship() as $id => $name) { ?>
+            <option value="<? echo "$id"; ?>">
+              <? echo $name; ?>
+            </option>
+          <? } ?>
+            <option value="" selected="selected"></option>
           </select>
         </td>
       </tr>
