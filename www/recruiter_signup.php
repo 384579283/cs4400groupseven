@@ -5,14 +5,14 @@
     <meta http-equiv="Content-Style-Type" content="text/css"/>
     <link rel="stylesheet" href="signup.css" type="text/css"/>
   </head>
-  <body><form action="applicant_signup.php" method="POST">
+  <body><form action="recruiter_signup.php" method="POST">
     <h1>
-      Create an Applicant Account
+      Create a Recruiter Account
     </h1>
     <table class="box">
       <tr>
         <td>
-          * Name
+          * Company Name
         </td>
         <td>
           <input type="text" />
@@ -20,7 +20,15 @@
       </tr>
       <tr>
         <td>
-          * Email
+          * Contact Person
+        </td>
+        <td>
+          <input type="text" />
+        </td>
+      </tr>
+      <tr>
+        <td>
+          * Contact Email
         </td>
         <td>
           <input type="text" />
@@ -44,7 +52,7 @@
       </tr>
       <tr>
         <td colspan="2" class="profileHeader">
-          Your Profile (You can update it later)
+          Tell us about your company
         </td>
       </tr>
       <tr>
@@ -57,45 +65,18 @@
       </tr>
       <tr>
         <td>
-          Highest degree
+          Fax
         </td>
         <td>
-          <select>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Birth year
-        </td>
-        <td>
-          <select>
-          <? for ($i = date("Y") - 123; $i <= date("Y"); $i++) { ?>
-            <option value="<? echo $i ?>"<?
-                if ($i == date("Y")) { echo ' selected="selected"'; }
-              ?>>
-              <? echo $i ?>
-            </option>
-          <? } ?>
-          </select>
+          <input type="text" />
         </td>
       </tr>
       <tr>
         <td>
-          Years of experience
+          Website
         </td>
         <td>
-          <select>
-          </select>
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Citizenship
-        </td>
-        <td>
-          <select>
-          </select>
+          <input type="text" value="http://" />
         </td>
       </tr>
       <tr>
