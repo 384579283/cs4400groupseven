@@ -1,0 +1,29 @@
+
+body, div, td, span {
+  font-family: sans-serif;
+}
+
+body {
+  background-color: #bdf;
+}
+
+h1 {
+  text-align: center;
+  font-size: 1.6em;
+  margin: .3em;
+}
+
+h2 {
+  text-align: center;
+  font-size: 1.2em;
+  margin: .1em;
+}
+
+.box {
+  border-width: .2em;
+  border-color: #369 #036 #369 #036;
+  border-style: solid;
+  background-color: #9cf;
+  padding: .8em;
+}
+
