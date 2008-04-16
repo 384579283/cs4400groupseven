@@ -1,3 +1,21 @@
+<?
+
+require_once('functions.php');
+
+require_once('db.php');
+
+if (register_post_keys('password')) {
+    $user_id = $db->admin_login($email, $password);
+    if ($user_id) {
+        $_SESSION['admin'] = true;
+        $_SESSION['user_id'] = $user_id;
+        redirect('industry_report.php');
+    } else {
+        $error = 'Login failed';
+    }
+}
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -15,7 +33,7 @@
           Password:
         </td>
         <td>
-          <input type="password" class="loginPasswordField" />
+          <input type="password" class="loginPasswordField" name="password" />
         </td>
       </tr>
       <tr>
