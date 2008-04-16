@@ -98,28 +98,41 @@ class Database {
 
     }
 
-    public function applicant_login($email, $password) {
+    private function customer_login($table, $email, $password) {
 
-        // Fetch the id of the applicant with this email and password
+        // Fetch the id of the user with this email and password
         $result = $this->doQuery(sprintf("
               SELECT  C.USER_ID
                 FROM  CUSTOMER C,
-                      APPLICANT A
+                      %s A
                WHERE  C.USER_ID = A.USER_ID
                  AND  C.EMAIL = '%s'
                  AND  C.PASSWORD = '%s';",
+            $table,
             mysql_real_escape_string($email),
             mysql_real_escape_string($password)
         ));
         $row = mysql_fetch_assoc($result);
 
-        // If no such applicant exists, login fails
+        // If no such user exists, login fails
         if (!$row) {
             return false;
         }
 
         // Successful login, return the user id
         return $row['USER_ID'];
+
+    }
+
+    public function applicant_login($email, $password) {
+
+        return $this->customer_login('APPLICANT', $email, $password);
+
+    }
+
+    public function recruiter_login($email, $password) {
+
+        return $this->customer_login('RECRUITER', $email, $password);
 
     }
 

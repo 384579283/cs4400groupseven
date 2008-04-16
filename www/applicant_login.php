@@ -34,7 +34,10 @@ if (register_post_keys('email', 'password')) {
           Email:
         </td>
         <td>
-          <input type="text" class="loginEmailField" name="email" />
+          <input type="text"
+                 class="loginEmailField"
+                 name="email"
+                 value="<? echo $email; ?>" />
         </td>
       </tr>
       <tr>
@@ -42,7 +45,9 @@ if (register_post_keys('email', 'password')) {
           Password:
         </td>
         <td>
-          <input type="password" class="loginPasswordField" name="password" />
+          <input type="password"
+                 class="loginPasswordField"
+                 name="password" />
         </td>
       </tr>
       <tr>
