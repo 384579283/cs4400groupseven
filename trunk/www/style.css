@@ -45,6 +45,17 @@ h2 {
   padding: .8em;
 }
 
+.error {
+  margin-left: auto;
+  margin-right: auto;
+  width: 30em;
+  border-width: .2em;
+  border-color: #833;
+  border-style: solid;
+  background-color: #fda;
+  padding: .8em;
+}
+
 input {
   width: 240px;
 }
