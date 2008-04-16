@@ -23,11 +23,11 @@
       }
     </style>
   </head>
-  <body>
+  <body><form action="applicant_signup.php" method="POST">
     <h1>
       Create an Applicant Account
     </h1>
-    <table>
+    <table class="box">
       <tr>
         <td>
           * Name
@@ -132,6 +132,6 @@
         </td>
       </tr>
     </table>
-  </body>
+  </form></body>
 </html>
 

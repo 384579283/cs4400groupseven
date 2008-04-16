@@ -3,40 +3,19 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="Content-Style-Type" content="text/css"/>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <style>
-      body {
-        padding: 8em;
-      }
-      table {
-        margin: 2em auto 0 auto;
-      }
-      td {
-        padding: .4em;
-        text-align: left;
-        vertical-align: top;
-      }
-      .submitCell {
-        text-align: center;
-        padding-top: 2em;
-      }
-      .signup {
-        text-align: center;
-        padding-top: 2em;
-      }
-    </style>
+    <link rel="stylesheet" href="login.css" type="text/css"/>
   </head>
-  <body>
+  <body><form action="applicant_login.php" method="POST">
     <h1>
       Applicant Sign In
     </h1>
-    <table>
+    <table class="box">
       <tr>
         <td>
           Email:
         </td>
         <td>
-          <input type="text" />
+          <input type="text" class="loginEmailField" />
         </td>
       </tr>
       <tr>
@@ -44,7 +23,7 @@
           Password:
         </td>
         <td>
-          <input type="password" />
+          <input type="password" class="loginPasswordField" />
         </td>
       </tr>
       <tr>
@@ -58,6 +37,6 @@
         </td>
       </tr>
     </table>
-  </body>
+  </form></body>
 </html>
 
