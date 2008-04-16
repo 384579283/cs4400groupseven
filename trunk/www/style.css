@@ -3,8 +3,14 @@ body, div, td, span {
   font-family: sans-serif;
 }
 
+a {
+  color: blue;
+}
+
 body {
   background-color: #bdf;
+  margin: 2em;
+  text-align: center;
 }
 
 h1 {
@@ -25,5 +31,15 @@ h2 {
   border-style: solid;
   background-color: #9cf;
   padding: .8em;
+}
+
+input {
+  width: 240px;
+}
+
+textarea {
+  width: 240px;
+  height: 80px;
+  text-align: left;
 }
 

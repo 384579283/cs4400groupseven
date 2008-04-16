@@ -6,8 +6,7 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <style>
       body {
-        margin: 8em 2em 6em 2em;
-        text-align: center;
+        margin-top: 8em;
       }
       table {
         margin: 2em auto 0 auto;
