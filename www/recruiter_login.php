@@ -1,3 +1,21 @@
+<?
+
+require_once('functions.php');
+
+require_once('db.php');
+
+if (register_post_keys('email', 'password')) {
+    $user_id = $db->recruiter_login($email, $password);
+    if ($user_id) {
+        $_SESSION['recruiter'] = true;
+        $_SESSION['user_id'] = $user_id;
+        redirect('recruiter_status.php');
+    } else {
+        $error = 'Login failed';
+    }
+}
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -6,6 +24,7 @@
     <link rel="stylesheet" href="login.css" type="text/css"/>
   </head>
   <body><form action="recruiter_login.php" method="POST">
+    <? include('error.php'); ?>
     <h1>
       Recruiter Sign In
     </h1>
