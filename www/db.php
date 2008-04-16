@@ -100,9 +100,9 @@ class Database {
 
     public function verify_applicant_login($email, $password) {
 
-        // Fetch the number of applicants which have this email and password
+        // Fetch the id of the applicant with this email and password
         $result = $this->doQuery(sprintf("
-              SELECT  COUNT(*) AS SUCCESS
+              SELECT  C.USER_ID
                 FROM  CUSTOMER C,
                       APPLICANT A
                WHERE  C.USER_ID = A.USER_ID
@@ -113,12 +113,16 @@ class Database {
         ));
         $row = mysql_fetch_assoc($result);
 
-        // Successful login if one user has this email and password
-        return ($row['SUCCESS'] == 1);
+        // If no such applicant exists, login fails
+        if (!$row) {
+            return false;
+        }
+
+        // Successful login, return the user id
+        return $row['USER_ID'];
 
     }
 
 }
 
 ?>
-
