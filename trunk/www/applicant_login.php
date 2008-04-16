@@ -5,7 +5,7 @@ require_once('functions.php');
 require_once('db.php');
 
 if (register_post_keys('email', 'password')) {
-    $user_id = $db->applicant_login($email, $password)
+    $user_id = $db->applicant_login($email, $password);
     if ($user_id) {
         $_SESSION['applicant'] = true;
         $_SESSION['user_id'] = $user_id;

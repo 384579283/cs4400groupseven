@@ -98,7 +98,7 @@ class Database {
 
     }
 
-    public function verify_applicant_login($email, $password) {
+    public function applicant_login($email, $password) {
 
         // Fetch the id of the applicant with this email and password
         $result = $this->doQuery(sprintf("
