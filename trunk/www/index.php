@@ -3,27 +3,8 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <meta http-equiv="Content-Style-Type" content="text/css"/>
-    <link rel="stylesheet" href="style.css" type="text/css"/>
-    <style>
-      body {
-        padding-top: 8em;
-      }
-      table {
-        margin: 2em auto 0 auto;
-      }
-      td {
-        vertical-align: top;
-      }
-      .middleSpace {
-        width: 2em;
-      }
-      .box {
-        width: 15em;
-        height: 15em;
-        text-align: left;
-        vertical-align: middle;
-      }
-    </style>
+    <link rel="stylesheet" href="index.css" type="text/css"/>
+    <title>Georgia Tech Career Service System</title>
   </head>
   <body>
     <h1>

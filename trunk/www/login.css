@@ -1,0 +1,29 @@
+@import "style.css";
+
+body {
+  padding-top: 8em;
+}
+
+table {
+  margin: 2em auto 0 auto;
+}
+
+td {
+  padding: .4em;
+  text-align: left;
+  vertical-align: top;
+}
+
+.submitCell {
+  text-align: center;
+  padding-top: 2em;
+}
+
+.signup {
+  text-align: center;
+  padding-top: 2em;
+}
+
+.loginEmailField, .loginPasswordField {
+}
+
