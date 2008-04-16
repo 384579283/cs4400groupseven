@@ -136,6 +136,21 @@ class Database {
 
     }
 
+    public function get_customer_name($user_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  C.NAME
+                FROM  CUSTOMER C
+               WHERE  C.USER_ID = '%s';",
+            mysql_real_escape_string($user_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return $row['NAME'];
+
+    }
+
 }
 
 ?>
