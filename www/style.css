@@ -7,10 +7,21 @@ a {
   color: blue;
 }
 
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
 body {
+  height: 100%;
   background-color: #bdf;
-  margin: 2em;
+  margin: 0;
+  padding: 2em;
   text-align: center;
+  border-width: 0 4em 0 4em;
+  border-color: #036;
+  border-style: solid;
 }
 
 h1 {
@@ -41,5 +52,9 @@ textarea {
   width: 240px;
   height: 80px;
   text-align: left;
+}
+
+input.btn {
+  height: 3em;
 }
 

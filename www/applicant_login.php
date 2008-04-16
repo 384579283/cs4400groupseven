@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <style>
       body {
-        margin-top: 8em;
+        padding: 8em;
       }
       table {
         margin: 2em auto 0 auto;
@@ -16,6 +16,10 @@
         text-align: left;
         vertical-align: top;
       }
+      .submitCell {
+        text-align: center;
+        padding-top: 2em;
+      }
       .signup {
         text-align: center;
         padding-top: 2em;
@@ -24,7 +28,7 @@
   </head>
   <body>
     <h1>
-      Applicant Login
+      Applicant Sign In
     </h1>
     <table>
       <tr>
@@ -41,6 +45,11 @@
         </td>
         <td>
           <input type="password" />
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2" class="submitCell">
+          <input type="submit" value="Sign In" class="btn" />
         </td>
       </tr>
       <tr>

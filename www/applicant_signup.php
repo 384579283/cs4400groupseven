@@ -128,7 +128,7 @@
       </tr>
       <tr>
         <td colspan="2" class="submitCell">
-          <input type="Submit" value="Submit" />
+          <input type="Submit" value="Submit" class="btn" />
         </td>
       </tr>
     </table>
