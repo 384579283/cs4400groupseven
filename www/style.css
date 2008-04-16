@@ -1,5 +1,5 @@
 
-body, div, td, span {
+body, div, td, span, h1, h2, h3, h4, h5, h6 {
   font-family: sans-serif;
 }
 
@@ -10,24 +10,25 @@ a {
 html {
   margin: 0;
   padding: 0;
-  height: 100%;
 }
 
 body {
-  height: 100%;
-  background-color: #bdf;
+  background-color: #036;
   margin: 0;
   padding: 2em;
   text-align: center;
-  border-width: 0 4em 0 4em;
-  border-color: #036;
-  border-style: solid;
+}
+
+form {
+  margin: 0;
+  padding: 0;
 }
 
 h1 {
   text-align: center;
   font-size: 1.6em;
   margin: .3em;
+  color: #def;
 }
 
 h2 {
@@ -40,7 +41,7 @@ h2 {
   border-width: .2em;
   border-color: #369 #036 #369 #036;
   border-style: solid;
-  background-color: #9cf;
+  background-color: #ace;
   padding: .8em;
 }
 
