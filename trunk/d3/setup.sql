@@ -1,3 +1,17 @@
+-- Create citizenship lookup table
+CREATE TABLE CITIZENSHIP_LU (
+  ID    INT          NOT NULL,
+  NAME  VARCHAR(32)  NOT NULL,
+  PRIMARY KEY(ID)
+);
+
+-- Populate citizenship lookup table
+INSERT INTO CITIZENSHIP_LU (ID, NAME)
+  VALUES (1, 'United States'),
+         (2, 'Canada'),
+         (3, 'Mexico'),
+         (4, 'Other');
+
 -- Create position type lookup table
 CREATE TABLE POSITION_TYPE_LU (
   ID    INT          NOT NULL,
