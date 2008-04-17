@@ -1,0 +1,7 @@
+
+Session variables:
+    user_id     the id of the user who is logged in
+    applicant   true iff the logged-in user is an applicant
+    recruiter   true iff the logged-in user is a recruiter
+    admin       true iff the logged-in user is an administrator
+
