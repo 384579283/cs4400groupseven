@@ -151,6 +151,22 @@ class Database {
 
     }
 
+    public function earliest_job_date() {
+
+        $result = $this->doQuery("
+              SELECT  J.POST_DATE
+                FROM  JOB J
+            ORDER BY  POST_DATE ASC
+               LIMIT  1");
+
+        if ($row = mysql_fetch_assoc($result)) {
+            return strtotime($row['POST_DATE']);
+        } else {
+            return time();
+        }
+
+    }
+
 }
 
 ?>
