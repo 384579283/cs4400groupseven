@@ -1,5 +1,33 @@
 <?
 
+function logout() {
+    $SESSION['applicant'] = false;
+    $SESSION['recruiter'] = false;
+    $SESSION['admin'] = false;
+    $SESSION['user_id'] = false;
+}
+
+function login_applicant($user_id) {
+    logout();
+    $_SESSION['applicant'] = true;
+    $_SESSION['user_id'] = $user_id;
+    redirect('job_search.php');
+}
+
+function login_recruiter($user_id) {
+    logout();
+    $_SESSION['recruiter'] = true;
+    $_SESSION['user_id'] = $user_id;
+    redirect('recruiter_status.php');
+}
+
+function login_admin($user_id) {
+    logout();
+    $_SESSION['admin'] = true;
+    $_SESSION['user_id'] = $user_id;
+    redirect('industry_report.php');
+}
+
 function redirect($url) {
     header("Location: " . $url);
     exit();

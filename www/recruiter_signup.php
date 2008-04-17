@@ -1,3 +1,38 @@
+<?
+
+require_once('functions.php');
+
+require_once('db.php');
+
+if (register_post_keys('company_name', 'contact_person',
+                       'contact_email', 'password', 'password_retype',
+                       'phone', 'fax', 'website', 'description')) {
+
+    if ($password != $password_retype) {
+        $error = "Passwords do not match.";
+    }
+
+    if (!$error) {
+
+        $user_id = $db->create_recruiter(
+                $password, $contact_email, $contact_person,
+                $company_name, $phone, $fax, $website, $description);
+
+        if ($user_id) {
+            login_recruiter($user_id);
+        } else {
+            $error = "Failed to add user.";
+        }
+
+    }
+
+} else {
+
+    $website = 'http://';
+
+}
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -6,6 +41,7 @@
     <link rel="stylesheet" href="signup.css" type="text/css"/>
   </head>
   <body><form action="recruiter_signup.php" method="POST">
+    <? include('error.php'); ?>
     <h1>
       Create a Recruiter Account
     </h1>
@@ -15,7 +51,7 @@
           * Company Name
         </td>
         <td>
-          <input type="text" />
+          <input type="text" value="<? echo $company_name; ?>" name="company_name" />
         </td>
       </tr>
       <tr>
@@ -23,7 +59,7 @@
           * Contact Person
         </td>
         <td>
-          <input type="text" />
+          <input type="text" value="<? echo $contact_person; ?>" name="contact_person" />
         </td>
       </tr>
       <tr>
@@ -31,7 +67,7 @@
           * Contact Email
         </td>
         <td>
-          <input type="text" />
+          <input type="text" value="<? echo $contact_email; ?>" name="contact_email" />
         </td>
       </tr>
       <tr>
@@ -39,7 +75,7 @@
           * Choose a password
         </td>
         <td>
-          <input type="password" />
+          <input type="password" name="password" />
         </td>
       </tr>
       <tr>
@@ -47,7 +83,7 @@
           * Re-enter password
         </td>
         <td>
-          <input type="password" />
+          <input type="password" name="password_retype" />
         </td>
       </tr>
       <tr>
@@ -60,7 +96,7 @@
           Phone
         </td>
         <td>
-          <input type="text" />
+          <input type="text" value="<? echo $phone; ?>" name="phone" />
         </td>
       </tr>
       <tr>
@@ -68,7 +104,7 @@
           Fax
         </td>
         <td>
-          <input type="text" />
+          <input type="text" value="<? echo $fax; ?>" name="fax" />
         </td>
       </tr>
       <tr>
@@ -76,7 +112,7 @@
           Website
         </td>
         <td>
-          <input type="text" value="http://" />
+          <input type="text" value="<? echo $website; ?>" name="website" />
         </td>
       </tr>
       <tr>
@@ -84,7 +120,7 @@
           Short description<br />(Not to exceed<br />500 characters)
         </td>
         <td>
-          <textarea></textarea>
+          <textarea name="description"><? echo $description; ?></textarea>
         </td>
       </tr>
       <tr>

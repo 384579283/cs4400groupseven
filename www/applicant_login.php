@@ -7,9 +7,7 @@ require_once('db.php');
 if (register_post_keys('email', 'password')) {
     $user_id = $db->applicant_login($email, $password);
     if ($user_id) {
-        $_SESSION['applicant'] = true;
-        $_SESSION['user_id'] = $user_id;
-        redirect('job_search.php');
+        login_applicant($user_id);
     } else {
         $error = 'Login failed';
     }

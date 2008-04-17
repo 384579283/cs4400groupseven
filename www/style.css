@@ -50,10 +50,14 @@ h2 {
   padding: .8em;
 }
 
+.box td {
+  padding: .4em;
+  text-align: left;
+  vertical-align: top;
+}
 
 table.box {
-  margin-left: auto;
-  margin-right: auto;
+  margin: 2em auto 0 auto;
 }
 
 .error {
@@ -122,7 +126,7 @@ input.btn {
   width: .2em;
 }
 
-.submitCell {
+td.submitCell {
   text-align: center;
   padding-top: 2em;
 }

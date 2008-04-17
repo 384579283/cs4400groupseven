@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
   <body>
-    <? $tab = 'profile'; include('applicant_header.php'); ?>
+    <? $tab = 'profile'; include('recruiter_header.php'); ?>
     <h1>Profile</h1>
   </body>
 </html>

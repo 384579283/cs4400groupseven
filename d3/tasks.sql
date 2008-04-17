@@ -1,11 +1,3 @@
--- Applicant login
-  SELECT  COUNT(*) AS SUCCESS
-    FROM  CUSTOMER C,
-          APPLICANT A
-   WHERE  C.USER_ID = A.USER_ID
-     AND  C.EMAIL = '<email>'
-     AND  C.PASSWORD = '<password>';
-
 -- Create customer account
   INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)
           VALUES  ('<id>', '<password>', '<email>', '<name>');
@@ -96,14 +88,6 @@
      AND  A.JOB_ID = J.JOB_ID
      AND  A.APPLICANT_ID = '<applicantId>'
      AND  A.CLOSE_DATE = NULL;
-
--- Recruiter login
-  SELECT  COUNT(*) AS SUCCESS
-    FROM  CUSTOMER C,
-          RECRUITER R
-   WHERE  C.USER_ID = R.USER_ID
-     AND  C.EMAIL = '<email>'
-     AND  C.PASSWORD = '<password>';
 
 -- Create recruiter account
   INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)

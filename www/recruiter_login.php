@@ -7,9 +7,7 @@ require_once('db.php');
 if (register_post_keys('email', 'password')) {
     $user_id = $db->recruiter_login($email, $password);
     if ($user_id) {
-        $_SESSION['recruiter'] = true;
-        $_SESSION['user_id'] = $user_id;
-        redirect('recruiter_status.php');
+        login_recruiter($user_id);
     } else {
         $error = 'Login failed';
     }
