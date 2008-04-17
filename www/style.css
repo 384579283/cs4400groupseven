@@ -70,3 +70,41 @@ input.btn {
   height: 3em;
 }
 
+.header {
+  width: 100%;
+  border-style: solid;
+  border-color: #012;
+  border-width: 0 0 .2em 0;
+}
+
+.header .hello {
+  text-align: left;
+  color: #def;
+}
+
+.header .signOut a {
+  color: #def;
+}
+
+.header .signOut {
+  text-align: right;
+}
+
+.header .tab, .header .tabSelected {
+  text-align: center;
+  width: 8em;
+  border-style: solid;
+  border-color: #012;
+  border-width: .2em .2em 0 .2em;
+  background-color: #ace;
+  padding: .4em .1em .4em .1em;
+}
+
+.header .tabSelected {
+  font-weight: bold;
+}
+
+.header .tabSpace {
+  width: .2em;
+}
+
