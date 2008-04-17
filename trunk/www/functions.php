@@ -30,7 +30,28 @@ function register_post_keys() {
 }
 
 function register_get_keys() {
-    return register_keys($_GET, func_get_args());
+    $args = func_get_args();
+    return register_keys($_GET, $args);
+}
+
+function register_optional_keys($array, $keys) {
+    foreach ($keys as $k) {
+        if (array_key_exists($k, $array)) {
+            $GLOBALS[$k] = $array[$k];
+        } else {
+            $GLOBALS[$k] = null;
+        }
+    }
+}
+
+function register_optional_post_keys() {
+    $args = func_get_args();
+    return register_optional_keys($_POST, $args);
+}
+
+function register_optional_get_keys() {
+    $args = func_get_args();
+    return register_optional_keys($_GET, $args);
 }
 
 ?>

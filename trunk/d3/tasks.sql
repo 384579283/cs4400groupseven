@@ -36,8 +36,8 @@
           RECRUITER R
    WHERE  J.POSTED_BY = R.USER_ID
      AND  J.POSITION_TYPE = '<positionType>'
-     AND  J.INDUSTRY = '<industry>',
-     AND  J.TITLE LIKE '%<keyword_1>%<keyword_2>%',
+     AND  J.INDUSTRY = '<industry>'
+     AND  J.TITLE LIKE '%<keyword_1>%<keyword_2>%'
      AND  J.MINIMUM_SALARY >= '<minimumSalary>';
 
 -- Show job details

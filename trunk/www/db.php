@@ -167,6 +167,62 @@ class Database {
 
     }
 
+    public function search_jobs($industry, $keywords,
+                                $position_types, $minimum_salary) {
+
+        $keyword_string = '%';
+        foreach($keywords as $word) {
+            $keyword_string .= mysql_real_escape_string($word) . '%';
+        }
+
+        $query = sprintf("
+              SELECT  J.TITLE,
+                      R.COMPANY_NAME AS EMPLOYER,
+                      I.INDUSTRY,
+                      J.MINIMUM_SALARY
+                FROM  JOB J,
+                      RECRUITER R
+               WHERE  J.POSTED_BY = R.USER_ID
+                 AND  J.INDUSTRY = '%s'
+                 AND  J.MINIMUM_SALARY >= '%s'
+                 AND  J.TITLE LIKE '%s' ",
+            mysql_real_escape_string($industry),
+            mysql_real_escape_string($minimum_salary),
+            $keyword_string
+        );
+
+        if (count($position_types) != 0) {
+            $query .= " AND ( 0 = 1 ";
+            foreach ($position_types as $type) {
+                $query .= sprintf("
+                     OR  J.JOB_ID IN (SELECT  T.JOB_ID
+                                        FROM  JOB_POSITION_TYPE T
+                                       WHERE  T.ID = '%s'",
+                    mysql_real_escape_string($type)
+                );
+            }
+            $query .= ")";
+        }
+
+        $query .= ';';
+
+        $result = $this->doQuery($query);
+
+        $search_results = array();
+
+        while ($row = mysql_fetch_assoc($result)) {
+            $search_results[] = array(
+                'title' => $row['TITLE'],
+                'employer' => $row['EMPLOYER'],
+                'industry' => $row['INDUSTRY'],
+                'minimum_salary' => $row['MINIMUM_SALARY']
+            );
+        }
+
+        return $search_results;
+
+    }
+
 }
 
 ?>
