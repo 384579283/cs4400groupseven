@@ -18,20 +18,6 @@
           DESCRIPTION = '<description>'
    WHERE  USER_ID = '<applicantId>';
 
--- Search for jobs
-  SELECT  J.TITLE,
-          R.COMPANY_NAME AS EMPLOYER,
-          J.POSITION_TYPE,
-          J.INDUSTRY,
-          J.MINIMUM_SALARY
-    FROM  JOB J,
-          RECRUITER R
-   WHERE  J.POSTED_BY = R.USER_ID
-     AND  J.POSITION_TYPE = '<positionType>'
-     AND  J.INDUSTRY = '<industry>'
-     AND  J.TITLE LIKE '%<keyword_1>%<keyword_2>%'
-     AND  J.MINIMUM_SALARY >= '<minimumSalary>';
-
 -- Show job details
   SELECT  J.TITLE,
           J.NUM_POSITIONS,
@@ -156,17 +142,6 @@
      SET  TEST_SCORE='<score>'
    WHERE  APPLICANT_ID='<applicantId>';
 
--- Post new job
-  INSERT  INTO JOB (JOB_ID, POSTED_BY, POST_DATE,
-                    TITLE, DESCRIPTION, POSITION_TYPE,
-                    INDUSTRY, MINIMUM_SALARY, TEST_TYPE,
-                    MIN_TEST_SCORE, EMAIL, PHONE, FAX, 
-                    NUM_POSITIONS)
-          VALUES ('<jobId>', '<postedBy>', '<postDate>',
-                  '<title>', '<description>', '<positionType>',
-                  '<industry>', '<minimumSalary>', '<testType>',
-                  '<minTestScore>', '<email>', '<phone>', '<fax>',
-                  '<numPositions>');
 -- Search for applicants
   SELECT  NAME,
           HIGHEST_DEGREE,
@@ -194,13 +169,4 @@
     FROM  ADMIN
    WHERE  USER_ID = '<userId>'
           AND PASSWORD = '<password>';
-
--- Show report by industry
-
-
-
-
-
-
--- Show report by salary
 

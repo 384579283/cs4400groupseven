@@ -246,6 +246,7 @@ class Database {
 
         $this->transaction_start();
 
+        // Insert the customer record
         $this->doQuery(sprintf("
               INSERT  INTO  CUSTOMER (PASSWORD, EMAIL, NAME)
               VALUES  ('%s', '%s', '%s');",
@@ -261,6 +262,7 @@ class Database {
             return false;
         }
 
+        // Insert the recruiter record
         $this->doQuery(sprintf("
               INSERT  INTO RECRUITER (USER_ID, COMPANY_NAME, PHONE,
                                       FAX, WEBSITE, DESCRIPTION)
@@ -284,6 +286,71 @@ class Database {
             return false;
         }
 
+        // Return the id of the inserted records
+        return $id;
+
+    }
+
+    public function post_job($posted_by, $title, $description,
+                             $industry, $minimum_salary, $test,
+                             $minimum_score, $email, $phone,
+                             $fax, $positions, $position_types) {
+
+        $this->transaction_start();
+
+        // Insert the job
+        $this->doQuery(sprintf("
+            INSERT  INTO JOB (POSTED_BY, POST_DATE,
+                    TITLE, DESCRIPTION, INDUSTRY, MINIMUM_SALARY,
+                    TEST_TYPE, MIN_TEST_SCORE, EMAIL, PHONE, FAX, 
+                    NUM_POSITIONS)
+          VALUES ('%s', '%s', '%s', '%s', '%s', '%s',
+                  '%s', '%s', '%s', '%s', '%s', '%s');",
+                mysql_real_escape_string($posted_by),
+                time(),
+                mysql_real_escape_string($title),
+                mysql_real_escape_string($description),
+                mysql_real_escape_string($industry),
+                mysql_real_escape_string($minimum_salary),
+                mysql_real_escape_string($test),
+                mysql_real_escape_string($minimum_score),
+                mysql_real_escape_string($email),
+                mysql_real_escape_string($phone),
+                mysql_real_escape_string($fax),
+                mysql_real_escape_string($num_positions)
+        ));
+
+        $id = mysql_insert_id();
+
+        if ($err = mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        // Insert each position type
+        foreach ($position_types as $type) {
+
+            $this->doQuery(sprintf("
+                INSERT INTO  JOB_POSITION_TYPE(JOB_ID, POSITION_TYPE)
+                     VALUES  ('%s', '%s');",
+                $id,
+                mysql_real_escape_string($type)
+            ));
+
+            if (mysql_error()) {
+                $this->transaction_rollback();
+                return false;
+            }
+
+        }
+
+        $this->transaction_commit();
+
+        if (mysql_error()) {
+            return false;
+        }
+
+        // Return the id of the inserted job
         return $id;
 
     }

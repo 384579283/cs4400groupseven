@@ -1,3 +1,46 @@
+<?
+
+require_once('functions.php');
+
+require_once('db.php');
+
+if (register_post_keys('title', 'positions', 'industry',
+                       'minimum_salary', 'test', 'minimum_score',
+                       'email', 'phone', 'fax', 'description')) {
+
+    $error = array();
+
+    if (!is_numeric($minimum_score)) {
+        $error[] = "Minimum score must be a number.";
+    }
+
+    if (!is_numeric($minimum_salary)) {
+        $error[] = "Minimum salary must be a number.";
+    }
+
+    if (strlen($description) > 500) {
+        $error[] = "Description cannot exceed 500 characters.";
+    }
+
+    $position_types = array();
+    foreach ($db->lookup_position_type() as $id => $name) {
+        if ($_POST['position_type_' . $id]) {
+            $position_types[] = $id;
+        }
+    }
+
+    if (count($error) == 0) {
+
+        $job_id = $db->post_job(
+                    $_SESSION['user_id'], $title, $description,
+                    $industry, $minimum_salary, $test, $minimum_score,
+                    $email, $phone, $fax, $positions, $position_types);
+
+    }
+
+}
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -124,7 +167,7 @@
       </tr>
       <tr>
         <td colspan="2" class="submitCell">
-          <input type="submit" value="Search" class="btn" />
+          <input type="submit" value="Post job" class="btn" />
         </td>
       </tr>
     </table>
