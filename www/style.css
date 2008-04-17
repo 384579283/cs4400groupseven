@@ -19,6 +19,11 @@ body {
   text-align: center;
 }
 
+td {
+  text-align: left;
+  vertical-align: top;
+}
+
 form {
   margin: 0;
   padding: 0;
@@ -43,6 +48,12 @@ h2 {
   border-style: solid;
   background-color: #ace;
   padding: .8em;
+}
+
+
+table.box {
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .error {
@@ -79,6 +90,7 @@ input.btn {
 
 .header .hello {
   text-align: left;
+  vertical-align: bottom;
   color: #def;
 }
 
@@ -88,10 +100,12 @@ input.btn {
 
 .header .signOut {
   text-align: right;
+  vertical-align: bottom;
 }
 
 .header .tab, .header .tabSelected {
   text-align: center;
+  vertical-align: middle;
   width: 8em;
   border-style: solid;
   border-color: #012;
@@ -106,5 +120,10 @@ input.btn {
 
 .header .tabSpace {
   width: .2em;
+}
+
+.submitCell {
+  text-align: center;
+  padding-top: 2em;
 }
 
