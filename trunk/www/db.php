@@ -24,6 +24,24 @@ class Database {
 
     }
 
+    private function transaction_start() {
+
+        mysql_query("START TRANSACTION");
+
+    }
+
+    private function transaction_rollback() {
+
+        mysql_query("ROLLBACK");
+
+    }
+
+    private function transaction_commit() {
+
+        mysql_query("COMMIT");
+
+    }
+
     private function doQuery($query) {
 
         // Execute the query
@@ -220,6 +238,53 @@ class Database {
         }
 
         return $search_results;
+
+    }
+
+    public function create_recruiter($password, $email, $name,
+            $company_name, $phone, $fax, $website, $description) {
+
+        $this->transaction_start();
+
+        $this->doQuery(sprintf("
+              INSERT  INTO  CUSTOMER (PASSWORD, EMAIL, NAME)
+              VALUES  ('%s', '%s', '%s');",
+            mysql_real_escape_string($password),
+            mysql_real_escape_string($email),
+            mysql_real_escape_string($name)
+        ));
+
+        $id = mysql_insert_id();
+
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        $this->doQuery(sprintf("
+              INSERT  INTO RECRUITER (USER_ID, COMPANY_NAME, PHONE,
+                                      FAX, WEBSITE, DESCRIPTION)
+              VALUES  ('%s', '%s', '%s', '%s', '%s', '%s');",
+            $id,
+            mysql_real_escape_string($company_name),
+            mysql_real_escape_string($phone),
+            mysql_real_escape_string($fax),
+            mysql_real_escape_string($website),
+            mysql_real_escape_string($description)
+        ));
+
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        $this->transaction_commit();
+
+        if (mysql_error()) {
+            return false;
+        }
+
+        return $id;
 
     }
 

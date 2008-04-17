@@ -1,22 +1,7 @@
 @import "style.css";
 
-td {
-  padding: .4em;
-  text-align: left;
-  vertical-align: top;
-}
-
-table {
-  margin: 2em auto 0 auto;
-}
-
 .profileHeader {
   font-weight: bold;
-  padding-top: 2em;
-}
-
-.submitCell {
-  text-align: center;
   padding-top: 2em;
 }
 

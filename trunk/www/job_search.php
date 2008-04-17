@@ -9,12 +9,11 @@ if ($_GET['searching']) {
             $checked_position_types[] = $id;
         }
     }
+
     register_optional_get_keys(
         'industry',
         'title_keywords',
         'minimum_salary');
-
-
 
 }
 
@@ -30,6 +29,7 @@ if ($_GET['searching']) {
     <input type="hidden" name="searching" value="true"/>
     <? $tab = 'job'; include('applicant_header.php'); ?>
     <h1>Job Search</h1>
+    <? include('error.php'); ?>
     <table class="box">
       <tr>
         <td>

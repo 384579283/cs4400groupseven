@@ -1,3 +1,10 @@
+<?
+
+require_once('functions.php');
+
+logout();
+
+?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
   <head>
@@ -6,8 +13,13 @@
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
   <body>
-    <? $tab = 'profile'; include('applicant_header.php'); ?>
-    <h1>Profile</h1>
+    <h1>Signed out</h1>
+    <table class="box">
+      <tr>
+        <td>
+          <a href="index.php">Return to front page</a>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
-

@@ -7,9 +7,7 @@ require_once('db.php');
 if (register_post_keys('password')) {
     $user_id = $db->admin_login($email, $password);
     if ($user_id) {
-        $_SESSION['admin'] = true;
-        $_SESSION['user_id'] = $user_id;
-        redirect('industry_report.php');
+        login_admin($user_id);
     } else {
         $error = 'Login failed';
     }

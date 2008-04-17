@@ -87,14 +87,14 @@ INSERT INTO TEST_TYPE_LU (ID, NAME)
 
 -- Create administrator table
 CREATE TABLE ADMINISTRATOR (
-  ADMIN_ID  INT          NOT NULL,
+  ADMIN_ID  INT          NOT NULL  AUTO_INCREMENT,
   PASSWORD  VARCHAR(32)  NOT NULL,
   PRIMARY KEY(ADMIN_ID)
 );
 
 -- Create customer table
 CREATE TABLE CUSTOMER (
-  USER_ID      INT           NOT NULL,
+  USER_ID      INT           NOT NULL  AUTO_INCREMENT,
   PASSWORD     VARCHAR(32)   NOT NULL,
   EMAIL        VARCHAR(220)  NOT NULL,
   NAME         VARCHAR(255)  NOT NULL,
@@ -103,7 +103,7 @@ CREATE TABLE CUSTOMER (
 
 -- Create recruiter table
 CREATE TABLE RECRUITER (
-  USER_ID       INT           NOT NULL,
+  USER_ID       INT           NOT NULL  AUTO_INCREMENT,
   COMPANY_NAME  VARCHAR(255)  NOT NULL,
   PHONE         CHAR(10),
   FAX           CHAR(10),
@@ -116,7 +116,7 @@ CREATE TABLE RECRUITER (
 
 -- Create applicant table
 CREATE TABLE APPLICANT (
-  USER_ID           INT           NOT NULL,
+  USER_ID           INT           NOT NULL  AUTO_INCREMENT,
   PHONE             CHAR(10),
   HIGHEST_DEGREE    INT,
   YEARS_EXPERIENCE  INT,
@@ -131,7 +131,7 @@ CREATE TABLE APPLICANT (
 
 -- Create application table
 CREATE TABLE APPLICATION (
-  APPLICATION_ID  INT      NOT NULL,
+  APPLICATION_ID  INT      NOT NULL  AUTO_INCREMENT,
   APPLICANT_ID    INT      NOT NULL,
   JOB_ID          INT      NOT NULL,
   TEST_SCORE      INT,
@@ -147,7 +147,7 @@ CREATE TABLE APPLICATION (
 
 -- Create job table
 CREATE TABLE JOB (
-  JOB_ID           INT           NOT NULL,
+  JOB_ID           INT           NOT NULL  AUTO_INCREMENT,
   POSTED_BY        INT           NOT NULL,
   POST_DATE        DATE          NOT NULL,
   TITLE            VARCHAR(255)  NOT NULL,
