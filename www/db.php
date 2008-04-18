@@ -437,7 +437,6 @@ class Database {
      * Creates a new job.
      *
      * @param $posted_by the id of the recruiter posting the job
-     * @param $title the jod title
      * @param $position_types [array]
      */
     public function post_job($posted_by, $title, $description,
@@ -504,6 +503,11 @@ class Database {
 
     }
 
+    /**
+     * For each job posted by the given recruiter, fetch some statistics.
+     *
+     * @param $user_id the id of the recruiter
+     */
     public function recruiter_status($user_id) {
 
         $result = $this->doQuery("
@@ -566,6 +570,11 @@ class Database {
 
     }
 
+    /**
+     * Closes a job and declines all pending applicants.
+     *
+     * @param job_id the id of the job to close
+     */
     public function close_job($job_id) {
 
         $this->transaction_start();
@@ -595,6 +604,11 @@ class Database {
 
     }
 
+    /**
+     * Retrieves all of the data for a particular job.
+     *
+     * @param $job_id the id of the job to investigate
+     */
     public function get_job($job_id) {
 
         $result = $this->doQuery(sprintf("
@@ -648,6 +662,12 @@ class Database {
 
     }
 
+    /**
+     * Sets the test score for an application.
+     *
+     * @param $application_id the id of the application
+     * @param $score the test score to set for the application
+     */
     public function update_test_score($application_id, $score) {
 
         $this->doQuery(sprintf("
@@ -660,6 +680,9 @@ class Database {
 
     }
 
+    /**
+     * Retrieves the company details for a given recruiter.
+     */
     public function get_company($recruiter_id) {
 
         $result = $this->doQuery(sprintf("
@@ -695,6 +718,12 @@ class Database {
 
     }
 
+    /**
+     * Creates a new application for a job.
+     *
+     * @param $applicant_id the id of the applicant who is applying for the job
+     * @param $job_id the id of the job the applicant is applying for
+     */
     public function apply($applicant_id, $job_id) {
 
         $this->doQuery(sprintf("
@@ -711,6 +740,11 @@ class Database {
 
     }
 
+    /**
+     * Retrieves details about each application made by a given applicant.
+     *
+     * @param $applicant_id the id of the applicant
+     */
     public function get_applications_for_applicant($applicant_id) {
 
         $result = $this->doQuery(sprintf("
