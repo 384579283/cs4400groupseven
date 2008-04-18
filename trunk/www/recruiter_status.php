@@ -28,6 +28,7 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
         <th>Applicants<br/>waiting&nbsp;for<br/>interviews</th>
         <th>Applicants<br/>waiting&nbsp;for<br/>decisions</th>
         <th>Filled<br/>positions</th>
+        <th>Requested<br/>positions</th>
         <th>Date<br/>posted</th>
       </tr>
     <? foreach ($jobs as $job) { ?>
@@ -52,13 +53,16 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
         <td style="text-align: center;">
           <? echo $job['status_filled']; ?>
         </td>
+        <td style="text-align: center;">
+          <? echo ($job['requested'] != 0 ? $job['requested'] : '-'); ?>
+        </td>
         <td style="white-space: nowrap;">
           <? echo format_date($job['date']); ?>
         </td>
       </tr>
     <? } ?>
       <tr>
-        <td colspan="8">
+        <td colspan="9">
           <input type="button" value="Close selected jobs"/>
         </td>
       </tr>
