@@ -4,6 +4,8 @@ require_once('functions.php');
 
 require_once('db.php');
 
+access_recruiter();
+
 if (register_post_keys('title', 'positions', 'industry',
                        'minimum_salary', 'test', 'minimum_score',
                        'email', 'phone', 'fax', 'description')) {

@@ -1,34 +1,83 @@
 <?
 
+function get_login_type() {
+    foreach (array('applicant', 'recruiter', 'admin') as $type) {
+        if ($_SESSION[$type]) {
+            return $type;
+        }
+    }
+    return false;
+}
+
+function access($type) {
+
+    session_start();
+
+    print_r($_SESSION);
+
+    $current_type = get_login_type();
+    if ($current_type != $type) {
+        echo "This page is for " . $type . "s only.<br/><br/>";
+        if ($current_type) {
+            echo "You are: " . $current_type;
+        } else {
+            echo "You are not logged in.";
+        }
+        exit();
+    }
+
+}
+
+
+function access_applicant() {
+    access('applicant');
+}
+
+function access_recruiter() {
+    access('recruiter');
+}
+
+function access_admin() {
+    access('admin');
+}
+
+function goto_continue($message, $url) {
+    $GLOBALS['message'] = $message;
+    $GLOBALS['url'] = $url;
+    require('continue.php');
+    session_write_close();
+    exit();
+}
+
 function logout() {
-    $SESSION['applicant'] = false;
-    $SESSION['recruiter'] = false;
-    $SESSION['admin'] = false;
-    $SESSION['user_id'] = false;
+    foreach (array('applicant', 'recruiter', 'admin', 'user_id') as $var) {
+        $_SESSION[$var] = null;
+    }
 }
 
 function login_applicant($user_id) {
     logout();
     $_SESSION['applicant'] = true;
     $_SESSION['user_id'] = $user_id;
-    redirect('job_search.php');
+    goto_continue('Login successful.', 'job_search.php');
 }
 
 function login_recruiter($user_id) {
     logout();
     $_SESSION['recruiter'] = true;
     $_SESSION['user_id'] = $user_id;
-    redirect('recruiter_status.php');
+    goto_continue('Login successful.', 'recruiter_status.php');
 }
 
 function login_admin($user_id) {
     logout();
     $_SESSION['admin'] = true;
     $_SESSION['user_id'] = $user_id;
-    redirect('industry_report.php');
+    goto_continue('Login successful.', 'industry_report.php');
 }
 
 function redirect($url) {
+    session_write_close();
     header("Location: " . $url);
     exit();
 }

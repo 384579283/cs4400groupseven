@@ -1,5 +1,11 @@
 <?
 
+require_once('functions.php');
+
+require_once('db.php');
+
+access_applicant();
+
 $checked_position_types = array();
 
 if ($_GET['searching']) {
