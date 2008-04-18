@@ -13,8 +13,6 @@ function access($type) {
 
     session_start();
 
-    print_r($_SESSION);
-
     $current_type = get_login_type();
     if ($current_type != $type) {
         echo "This page is for " . $type . "s only.<br/><br/>";
