@@ -307,7 +307,7 @@ class Database {
           VALUES ('%s', '%s', '%s', '%s', '%s', '%s',
                   '%s', '%s', '%s', '%s', '%s', '%s');",
                 mysql_real_escape_string($posted_by),
-                time(),
+                date("Y-m-d"),
                 mysql_real_escape_string($title),
                 mysql_real_escape_string($description),
                 mysql_real_escape_string($industry),
@@ -352,6 +352,66 @@ class Database {
 
         // Return the id of the inserted job
         return $id;
+
+    }
+
+    public function recruiter_status($user_id) {
+
+        $result = $this->doQuery("
+
+          SELECT  J.JOB_ID,
+                  J.TITLE,
+                  J.POST_DATE,
+                  --# waiting for tests
+                  (  SELECT COUNT(*)
+                      FROM  APPLICATION NATURAL JOIN JOB
+                     WHERE  STATUS = (  SELECT DISTINCT ID
+                                         FROM  APPLICATION_STATUS_LU
+                                        WHERE  UPPER(NAME) LIKE '%TEST%'))
+                  AS WAITING_FOR_TESTS,
+                  -- # waiting for interviews,
+                  (  SELECT COUNT(*)
+                      FROM  APPLICATION A NATURAL JOIN JOB
+                     WHERE  A.STATUS = (  SELECT DISTINCT ID
+                                         FROM  APPLICATION_STATUS_LU
+                                        WHERE  UPPER(NAME) LIKE '%INTERVIEW%'))
+                  AS WAITING_FOR_INTERVIEWS,
+                  --# waiting for decisions,
+                  (  SELECT COUNT(*)
+                      FROM  APPLICATION A NATURAL JOIN JOB
+                     WHERE  A.STATUS = (  SELECT DISTINCT ID
+                                           FROM  APPLICATION_STATUS_LU
+                                          WHERE  UPPER(NAME) LIKE '%DECISION%'))
+                  AS WAITING_FOR_DECISIONS,
+                  --# positions filled
+                  (  SELECT COUNT(*)
+                      FROM  APPLICATION A NATURAL JOIN JOB
+                     WHERE  A.STATUS = (  SELECT DISTINCT ID
+                                           FROM  APPLICATION_STATUS_LU
+                                          WHERE  UPPER(NAME) LIKE '%ACCEPTED%'))
+                  AS POSITIONS_FILLED,
+                  J.NUM_POSITIONS,
+                  J.POST_DATE
+            FROM  JOB J" . sprintf("
+           WHERE  J.POSTED_BY = '%s';",
+            mysql_real_escape_string($user_id)
+        ));
+
+        $jobs = array();
+
+        while ($row = mysql_fetch_assoc($result)) {
+            $jobs[] = array(
+                'id' => $row['JOB_ID'],
+                'title' => $row['TITLE'],
+                'date' => strtotime($row['POST_DATE']),
+                'status_test' => $row['WAITING_FOR_TESTS'],
+                'status_interview' => $row['WAITING_FOR_INTERVIEWS'],
+                'status_decision' => $row['WAITING_FOR_DECISIONS'],
+                'status_filled' => $row['POSITIONS_FILLED'],
+            );
+        }
+
+        return $jobs;
 
     }
 
