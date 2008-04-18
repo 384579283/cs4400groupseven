@@ -1,34 +1,4 @@
 
--- Apply
-  INSERT  INTO APPLICATION (APPLICATION_ID, APPLICANT_ID, JOB_ID,
-                            STATUS, OPEN_DATE)
-          VALUES ('<applicationId>', '<applicantId>', '<jobId>',
-                  '1', '<openDate>');
-
--- Show company details
-  SELECT  R.COMPANY_NAME,
-          C.EMAIL,
-          C.PHONE,
-          R.FAX,
-          R.WEBSITE,
-          R.DESCRIPTION
-    FROM  CUSTOMER C,
-          RECRUITER R
-   WHERE  C.USER_ID = R.USER_ID
-     AND  R.USER_ID = '<recruiterId>';
-
--- Show applications' status for all jobs
-  SELECT  J.TITLE,
-          R.COMPANY_NAME,
-          A.OPEN_DATE,
-          A.STATUS
-    FROM  JOB J,
-          RECRUITER R,
-          APPLICATION A
-   WHERE  J.POSTED_BY = R.USER_ID
-     AND  A.JOB_ID = J.JOB_ID
-     AND  A.APPLICANT_ID = '<applicantId>';
-
 -- Show applications' status for jobs in process
   SELECT  J.TITLE,
           R.COMPANY_NAME,
@@ -72,11 +42,6 @@
                               WHERE  C.USER_ID = A.APPLICANT_ID)) AS STATUS,
           TEST_SCORE
     FROM  APPLICATION A;
-
--- Update score
-  UPDATE  APPLICATION
-     SET  TEST_SCORE='<score>'
-   WHERE  APPLICANT_ID='<applicantId>';
 
 -- Search for applicants
   SELECT  NAME,
