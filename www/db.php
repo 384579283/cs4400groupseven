@@ -241,12 +241,8 @@ class Database {
 
     }
 
-    public function create_recruiter($password, $email, $name,
-            $company_name, $phone, $fax, $website, $description) {
+    private function create_customer($password, $email, $name) {
 
-        $this->transaction_start();
-
-        // Insert the customer record
         $this->doQuery(sprintf("
               INSERT  INTO  CUSTOMER (PASSWORD, EMAIL, NAME)
               VALUES  ('%s', '%s', '%s');",
@@ -255,7 +251,17 @@ class Database {
             mysql_real_escape_string($name)
         ));
 
-        $id = mysql_insert_id();
+        return mysql_insert_id();
+
+    }
+
+    public function create_recruiter($password, $email, $name,
+            $company_name, $phone, $fax, $website, $description) {
+
+        $this->transaction_start();
+
+        // Insert the customer record
+        $id = $this->create_customer($password, $email, $name);
 
         if (mysql_error()) {
             $this->transaction_rollback();
@@ -291,6 +297,73 @@ class Database {
 
     }
 
+    public function create_applicant($password, $email, $name,
+            $phone, $degree, $experience, $citizenship, $birth, $description) {
+
+        $this->transaction_start();
+
+        // Insert the customer record
+        $id = $this->create_customer($password, $email, $name);
+
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        // Insert the applicant record
+        $this->doQuery(sprintf("
+              INSERT  INTO APPLICANT (USER_ID, PHONE, HIGHEST_DEGREE,
+                                      YEARS_EXPERIENCE, CITIZENSHIP,
+                                      BIRTH_YEAR, DESCRIPTION)
+              VALUES  ('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+            $id,
+            mysql_real_escape_string($phone),
+            mysql_real_escape_string($degree),
+            mysql_real_escape_string($experience),
+            mysql_real_escape_string($citizenship),
+            mysql_real_escape_string($birth),
+            mysql_real_escape_string($description)
+        ));
+
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        $this->transaction_commit();
+
+        if (mysql_error()) {
+            return false;
+        }
+
+        // Return the id of the inserted records
+        return $id;
+
+    }
+
+    public function edit_applicant($user_id, $phone, $degree, $experience,
+                                   $citizenship, $birth, $description) {
+
+        $this->doQuery(sprintf("
+              UPDATE  APPLICANT
+                 SET  PHONE = '%s',
+                      HIGHEST_DEGREE = '%s',
+                      YEARS_EXPERIENCE = '%s',
+                      CITIZENSHIP = '%s',
+                      BIRTH_YEAR = '%s',
+                      DESCRIPTION = '%s'
+               WHERE  USER_ID = '%s';",
+                mysql_real_escape_string($phone),
+                mysql_real_escape_string($degree),
+                mysql_real_escape_string($experience),
+                mysql_real_escape_string($citizenship),
+                mysql_real_escape_string($birth),
+                mysql_real_escape_string($description),
+                mysql_real_escape_string($user_id),
+        ));
+
+    }
+
     public function post_job($posted_by, $title, $description,
                              $industry, $minimum_salary, $test,
                              $minimum_score, $email, $phone,
@@ -317,7 +390,7 @@ class Database {
                 mysql_real_escape_string($email),
                 mysql_real_escape_string($phone),
                 mysql_real_escape_string($fax),
-                mysql_real_escape_string($num_positions)
+                mysql_real_escape_string($positions)
         ));
 
         $id = mysql_insert_id();
@@ -393,7 +466,8 @@ class Database {
                   J.NUM_POSITIONS,
                   J.POST_DATE
             FROM  JOB J" . sprintf("
-           WHERE  J.POSTED_BY = '%s';",
+           WHERE  J.POSTED_BY = '%s'
+             AND  J.ACTIVE = '1';",
             mysql_real_escape_string($user_id)
         ));
 
@@ -408,10 +482,93 @@ class Database {
                 'status_interview' => $row['WAITING_FOR_INTERVIEWS'],
                 'status_decision' => $row['WAITING_FOR_DECISIONS'],
                 'status_filled' => $row['POSITIONS_FILLED'],
+                'requested' => $row['NUM_POSITIONS']
             );
         }
 
         return $jobs;
+
+    }
+
+    public function close_job($job_id) {
+
+        $this->transaction_start();
+
+        // TODO : fetch a list of application IDs for the job
+        $applications = array();
+
+        foreach ($applications as $application_id) {
+
+            // TODO Decline the application
+
+            if (mysql_error()) {
+                $this->transaction_rollback();
+                return false;
+            }
+
+        }
+
+        // TODO Set job.active to false
+
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
+        }
+
+        $this->transaction_commit();
+
+    }
+
+    public function getJob($job_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  J.TITLE,
+                      J.NUM_POSITIONS,
+                      J.INDUSTRY,
+                      J.MINIMUM_SALARY,
+                      J.TEST_TYPE,
+                      J.MIN_TEST_SCORE,
+                      J.EMAIL,
+                      J.FAX,
+                      J.DESCRIPTION
+                FROM  JOB J
+               WHERE  J.JOB_ID = '%s';",
+            mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        if (!$row) {
+            return false;
+        }
+
+        $job = array(
+            'title' => $row['TITLE'],
+            'positions' => $row['NUM_POSITIONS'],
+            'industry' => $row['INDUSTRY'],
+            'salary' => $row['MINIMUM_SALARY'],
+            'test' => $row['TEST_TYPE'],
+            'test_score' => $row['MIN_TEST_SCORE'],
+            'email' => $row['EMAIL'],
+            'fax' => $row['FAX'],
+            'description' => $row['DESCRIPTION']
+        );
+
+        $result = $this->doQuery(sprintf("
+              SELECT  T.POSITION_TYPE
+                FROM  JOB_POSITION_TYPE T
+               WHERE  T.JOB_ID = '%s'",
+            mysql_real_escape_string($job_id)
+        ));
+
+        $position_types = array();
+        while ($row = mysql_fetch_assoc($result)) {
+            $position_types[] = $row['POSITION_TYPE'];
+        }
+
+        $job['position_types'] = $position_types;
+
+        return $job;
 
     }
 
