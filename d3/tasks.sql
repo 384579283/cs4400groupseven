@@ -1,17 +1,4 @@
 
--- Show applications' status for jobs in process
-  SELECT  J.TITLE,
-          R.COMPANY_NAME,
-          A.OPEN_DATE,
-          A.STATUS
-    FROM  JOB J,
-          RECRUITER R,
-          APPLICATION A
-   WHERE  J.POSTED_BY = R.USER_ID
-     AND  A.JOB_ID = J.JOB_ID
-     AND  A.APPLICANT_ID = '<applicantId>'
-     AND  A.CLOSE_DATE = NULL;
-
 -- Create recruiter account
   INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)
           VALUES  ('<id>', '<password>', '<email>', '<name>');
@@ -65,10 +52,4 @@
           BIRTH_YEAR,
           DESCRIPTION
    FROM  APPLICANT NATURAL JOIN CUSTOMER; 
-
--- Admin login
-  SELECT  COUNT(*) AS SUCCESS
-    FROM  ADMIN
-   WHERE  USER_ID = '<userId>'
-          AND PASSWORD = '<password>';
 

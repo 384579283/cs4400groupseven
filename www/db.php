@@ -186,10 +186,36 @@ class Database {
     }
 
     /**
+     * Validates the login for an admin.
+     *
+     * If authenticated succeeds, return the admin's id.
+     * Otherwise, return false.
+     */
+    public function admin_login($password) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  A.USER_ID
+                FROM  ADMIN
+               WHERE  PASSWORD = '%s';",
+            mysql_real_escape_string($password)
+        ));
+
+        if (!$result) {
+            return false;
+        }
+
+        $row = mysql_fetch_assoc($result);
+
+        $id = $row['USER_ID'];
+
+        return $id;
+
+    }
+
+    /**
      * Gets the name of a customer.
      *
-     * @param $user_id
-     *        the customer's id
+     * @param $user_id the customer's id
      */
     public function get_customer_name($user_id) {
 
@@ -744,10 +770,12 @@ class Database {
      * Retrieves details about each application made by a given applicant.
      *
      * @param $applicant_id the id of the applicant
+     * @param $show_all true to show all applications,
+     *                  false to show only jobs in process
      */
-    public function get_applications_for_applicant($applicant_id) {
+    public function get_applications_for_applicant($applicant_id, $show_all) {
 
-        $result = $this->doQuery(sprintf("
+        $query = sprintf("
               SELECT  J.TITLE,
                       R.COMPANY_NAME,
                       A.OPEN_DATE,
@@ -757,9 +785,18 @@ class Database {
                       APPLICATION A
                WHERE  J.POSTED_BY = R.USER_ID
                  AND  A.JOB_ID = J.JOB_ID
-                 AND  A.APPLICANT_ID = '%s';",
+                 AND  A.APPLICANT_ID = '%s'",
                 mysql_real_escape_string($applicant_id)
-        ));
+        );
+
+        if (!$show_all) {
+            $query .= "
+                 AND  A.CLOSE_DATE = NULL";
+        }
+
+        $query .= ";";
+
+        $result = $this->doQuery();
 
         $applications = array();
 
@@ -775,8 +812,6 @@ class Database {
         return $applications;
 
     }
-
-
 
 }
 
