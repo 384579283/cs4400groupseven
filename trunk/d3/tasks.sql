@@ -1,20 +1,4 @@
 
--- Create recruiter account
-  INSERT  INTO  CUSTOMER (USER_ID, PASSWORD, EMAIL, NAME)
-          VALUES  ('<id>', '<password>', '<email>', '<name>');
-  INSERT  INTO RECRUITER (USER_ID, COMPANY_NAME, PHONE, FAX,
-                          WEBSITE, DESCRIPTION)
-          VALUES  ('<id>', '<companyName>', '<phone>', '<fax>',
-                   '<website>', '<description>');
-
--- Recruiter profile update (phone, fax, website, description)
-  UPDATE  RECRUITER
-     SET  PHONE = '<phone>',
-          FAX = '<fax>',
-          WEBSITE = '<website>',
-          DESCRIPTION = '<description>'
-   WHERE  USER_ID = '<applicantId>';
-
 -- Show applications status
   SELECT  A.APPLICATION_ID,
           --name

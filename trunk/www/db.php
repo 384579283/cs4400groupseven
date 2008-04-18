@@ -460,6 +460,28 @@ class Database {
     }
 
     /**
+     * Modifies a recruiter account.
+     */
+    public function edit_recruiter($user_id, $phone, $fax,
+                                   $website, $description) {
+
+        $this->doQuery(sprintf("
+              UPDATE  RECRUITER
+                 SET  PHONE = '%s',
+                      FAX = '%s',
+                      WEBSITE = '%s',
+                      DESCRIPTION = '%s'
+               WHERE  USER_ID = '%s';",
+                mysql_real_escape_string($phone),
+                mysql_real_escape_string($fax),
+                mysql_real_escape_string($website),
+                mysql_real_escape_string($description),
+                mysql_real_escape_string($user_id)
+        ));
+
+    }
+
+    /**
      * Creates a new job.
      *
      * @param $posted_by the id of the recruiter posting the job
