@@ -6,6 +6,8 @@ require_once('db.php');
 
 access_recruiter();
 
+$jobs = $db->recruiter_status($_SESSION['user_id']);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -17,6 +19,50 @@ access_recruiter();
   <body>
     <? $tab = 'status'; include('recruiter_header.php'); ?>
     <h1>Status</h1>
+    <table class="box" cellpadding="8">
+      <tr>
+        <th></th>
+        <th>Job<br/>ID</th>
+        <th>Job&nbsp;title</th>
+        <th>Applicants<br/>waiting&nbsp;for<br/>tests</th>
+        <th>Applicants<br/>waiting&nbsp;for<br/>interviews</th>
+        <th>Applicants<br/>waiting&nbsp;for<br/>decisions</th>
+        <th>Filled<br/>positions</th>
+        <th>Date<br/>posted</th>
+      </tr>
+    <? foreach ($jobs as $job) { ?>
+      <tr>
+        <td><input type="checkbox" /></td>
+        <td style="text-align: center;">
+          <? echo $job['id']; ?>
+        </td>
+        <td>
+          <a href="job_update.php?job_id=<? echo $job['id']; ?>">
+            <? echo $job['title']; ?></td>
+          </a>
+        <td style="text-align: center;">
+          <? echo $job['status_test']; ?>
+        </td>
+        <td style="text-align: center;">
+          <? echo $job['status_interview']; ?>
+        </td>
+        <td style="text-align: center;">
+          <? echo $job['status_decision']; ?>
+        </td>
+        <td style="text-align: center;">
+          <? echo $job['status_filled']; ?>
+        </td>
+        <td style="white-space: nowrap;">
+          <? echo format_date($job['date']); ?>
+        </td>
+      </tr>
+    <? } ?>
+      <tr>
+        <td colspan="8">
+          <input type="button" value="Close selected jobs"/>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>
 

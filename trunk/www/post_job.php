@@ -10,25 +10,43 @@ if (register_post_keys('title', 'positions', 'industry',
                        'minimum_salary', 'test', 'minimum_score',
                        'email', 'phone', 'fax', 'description')) {
 
-    $error = array();
-
-    if (!is_numeric($minimum_score)) {
-        $error[] = "Minimum score must be a number.";
-    }
-
-    if (!is_numeric($minimum_salary)) {
-        $error[] = "Minimum salary must be a number.";
-    }
-
-    if (strlen($description) > 500) {
-        $error[] = "Description cannot exceed 500 characters.";
-    }
-
     $position_types = array();
     foreach ($db->lookup_position_type() as $id => $name) {
         if ($_POST['position_type_' . $id]) {
             $position_types[] = $id;
         }
+    }
+
+    $error = array();
+
+    if (!$title) {
+        $error[] = "Job title is required.";
+    }
+
+    if (count($position_types) == 0) {
+        $error[] = "At least one position type is required.";
+    }
+
+    if (!$minimum_salary) {
+        $error[] = "Minimum salary is required.";
+    } else if (!is_numeric($minimum_salary)) {
+        $error[] = "Minimum salary must be a number.";
+    }
+
+    if ($minimum_score && !is_numeric($minimum_score)) {
+        $error[] = "Minimum score must be a number.";
+    }
+
+    if (!$email) {
+        $error[] = "Contact email is required.";
+    }
+
+    if (!$phone) {
+        $error[] = "Phone is required.";
+    }
+
+    if (strlen($description) > 500) {
+        $error[] = "Description cannot exceed 500 characters.";
     }
 
     if (count($error) == 0) {
@@ -37,6 +55,8 @@ if (register_post_keys('title', 'positions', 'industry',
                     $_SESSION['user_id'], $title, $description,
                     $industry, $minimum_salary, $test, $minimum_score,
                     $email, $phone, $fax, $positions, $position_types);
+
+        goto_continue("Job $job_id posted", 'recruiter_status.php');
 
     }
 

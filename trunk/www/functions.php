@@ -1,5 +1,9 @@
 <?
 
+function format_date($date) {
+    return date("M j, Y", $date);
+}
+
 function get_login_type() {
     foreach (array('applicant', 'recruiter', 'admin') as $type) {
         if ($_SESSION[$type]) {

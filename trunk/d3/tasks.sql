@@ -91,37 +91,6 @@
           DESCRIPTION = '<description>'
    WHERE  USER_ID = '<applicantId>';
 
--- Show jobs status
-  SELECT  J.JOB_ID,
-          J.TITLE,
-          --# waiting for tests
-          (  SELECT COUNT(*)
-              FROM  APPLICATION NATURAL JOIN JOB
-             WHERE  STATUS = (  SELECT DISTINCT ID
-                                 FROM  APPLICATION_STATUS_LU
-                                WHERE  UPPER(NAME) LIKE '%TEST%')) AS WAITING_FOR_TESTS,
-          -- # waiting for interviews,
-          (  SELECT COUNT(*)
-              FROM  APPLICATION NATURAL JOIN JOB
-             WHERE  STATUS = (  SELECT DISTINCT ID
-                                 FROM  APPLICATION_STATUS_LU
-                                WHERE  UPPER(NAME) LIKE '%INTERVIEW%')) AS WAITING_FOR_INTERVIEWS,
-          --# waiting for decisions,
-          (  SELECT COUNT(*)
-              FROM  APPLICATION NATURAL JOIN JOB
-             WHERE  A.STATUS = (  SELECT DISTINCT ID
-                                   FROM  APPLICATION_STATUS_LU
-                                  WHERE  UPPER(NAME) LIKE '%DECISION%')) AS WAITING_FOR_DECISIONS,
-          --# positions filled
-          (  SELECT COUNT(*)
-              FROM  APPLICATION NATURAL JOIN JOB
-             WHERE  A.STATUS = (  SELECT DISTINCT ID
-                                   FROM  APPLICATION_STATUS_LU
-                                  WHERE  UPPER(NAME) LIKE '%ACCEPTED%')) AS POSITIONS_FILLED,
-          J.NUM_POSITIONS,
-          J.POST_DATE
-    FROM  JOB J;
-
 -- Show applications status
   SELECT  A.APPLICATION_ID,
           --name
