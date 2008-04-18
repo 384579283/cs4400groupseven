@@ -519,7 +519,7 @@ class Database {
 
     }
 
-    public function getJob($job_id) {
+    public function get_job($job_id) {
 
         $result = $this->doQuery(sprintf("
               SELECT  J.TITLE,
@@ -569,6 +569,100 @@ class Database {
         $job['position_types'] = $position_types;
 
         return $job;
+
+    }
+
+    public function update_test_score($application_id, $score) {
+
+        $this->doQuery(sprintf("
+              UPDATE  APPLICATION
+                 SET  TEST_SCORE='%s'
+               WHERE  APPLICATION_ID='%s';",
+            mysql_real_escape_string($score),
+            mysql_real_escape_string($application_id)
+        ));
+
+    }
+
+    public function get_company($recruiter_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  R.COMPANY_NAME,
+                      C.EMAIL,
+                      C.PHONE,
+                      R.FAX,
+                      R.WEBSITE,
+                      R.DESCRIPTION
+                FROM  CUSTOMER C,
+                      RECRUITER R
+               WHERE  C.USER_ID = R.USER_ID
+                 AND  R.USER_ID = '%s';",
+            mysql_real_escape_string($recruiter_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        if (!$row) {
+            return false;
+        }
+
+        $company = array(
+            'name' => $row['COMPANY_NAME'],
+            'email' => $row['EMAIL'],
+            'phone' => $row['PHONE'],
+            'fax' => $row['FAX'],
+            'website' => $row['WEBSITE'],
+            'description' => $row['DESCRIPTION'],
+        );
+
+        return $company;
+
+    }
+
+    public function apply($applicant_id, $job_id) {
+
+        $this->doQuery(sprintf("
+              INSERT  INTO APPLICATION (APPLICANT_ID, JOB_ID, OPEN_DATE)
+                      VALUES ('%s', '%s', '%s');",
+                mysql_real_escape_string($applicant_id),
+                mysql_real_escape_string($job_id),
+                date("Y-m-d")
+        ));
+
+        $id = mysql_insert_id();
+
+        return $id;
+
+    }
+
+    public function get_applications_for_applicant($applicant_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  J.TITLE,
+                      R.COMPANY_NAME,
+                      A.OPEN_DATE,
+                      A.STATUS
+                FROM  JOB J,
+                      RECRUITER R,
+                      APPLICATION A
+               WHERE  J.POSTED_BY = R.USER_ID
+                 AND  A.JOB_ID = J.JOB_ID
+                 AND  A.APPLICANT_ID = '%s';",
+                mysql_real_escape_string($applicant_id)
+        ));
+
+        $applications = array();
+
+        while ($row = mysql_fetch_assoc($result)) {
+            $applications[] = array(
+                'title' => $row['TITLE'],
+                'company' => $row['COMPANY_NAME'],
+                'date_applied' => $row['OPEN_DATE'],
+                'status' => $row['STATUS']
+            );
+        }
+
+        return $applications;
 
     }
 
