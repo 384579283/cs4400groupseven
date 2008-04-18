@@ -80,11 +80,18 @@ class Database {
 
     }
 
+    /**
+     * Retrives every application status, indexed by id.
+     */
     public function lookup_application_status() {
 
         return $this->get_lookup_table("APPLICATION_STATUS_LU");
 
     }
+
+    /**
+     * Retrives every citizenship option, indexed by id.
+     */
 
     public function lookup_citizenship() {
 
@@ -92,24 +99,36 @@ class Database {
 
     }
 
+    /**
+     * Retrives every degree option, indexed by id.
+     */
     public function lookup_degree() {
 
         return $this->get_lookup_table("DEGREE_LU");
 
     }
 
+    /**
+     * Retrives every industry, indexed by id.
+     */
     public function lookup_industry() {
 
         return $this->get_lookup_table("INDUSTRY_LU");
 
     }
 
+    /**
+     * Retrives every job position type, indexed by id.
+     */
     public function lookup_position_type() {
 
         return $this->get_lookup_table("POSITION_TYPE_LU");
 
     }
 
+    /**
+     * Retrives every test type, indexed by id.
+     */
     public function lookup_test_type() {
 
         return $this->get_lookup_table("TEST_TYPE_LU");
@@ -142,18 +161,36 @@ class Database {
 
     }
 
+    /**
+     * Validates the login for an applicant.
+     *
+     * If authenticated succeeds, return the applicant's id.
+     * Otherwise, return false.
+     */
     public function applicant_login($email, $password) {
 
         return $this->customer_login('APPLICANT', $email, $password);
 
     }
 
+    /**
+     * Validates the login for a recruiter.
+     *
+     * If authenticated succeeds, return the recruiter's id.
+     * Otherwise, return false.
+     */
     public function recruiter_login($email, $password) {
 
         return $this->customer_login('RECRUITER', $email, $password);
 
     }
 
+    /**
+     * Gets the name of a customer.
+     *
+     * @param $user_id
+     *        the customer's id
+     */
     public function get_customer_name($user_id) {
 
         $result = $this->doQuery(sprintf("
@@ -169,6 +206,10 @@ class Database {
 
     }
 
+    /**
+     * Gets the date of the earliest-posted job.
+     * Used to determine how far back reports can be generated.
+     */
     public function earliest_job_date() {
 
         $result = $this->doQuery("
@@ -185,6 +226,14 @@ class Database {
 
     }
 
+    /**
+     * Job search.
+     *
+     * @param $industry (optional)
+     * @param $keywords array of keywords
+     * @param $position_types array of position types
+     * @param $minimum_salary (optional)
+     */
     public function search_jobs($industry, $keywords,
                                 $position_types, $minimum_salary) {
 
@@ -201,13 +250,24 @@ class Database {
                 FROM  JOB J,
                       RECRUITER R
                WHERE  J.POSTED_BY = R.USER_ID
-                 AND  J.INDUSTRY = '%s'
-                 AND  J.MINIMUM_SALARY >= '%s'
                  AND  J.TITLE LIKE '%s' ",
-            mysql_real_escape_string($industry),
-            mysql_real_escape_string($minimum_salary),
             $keyword_string
         );
+
+        if ($minimum_salary) {
+            $query .= sprintf("
+                     AND  J.MINIMUM_SALARY >= '%s'",
+                    mysql_real_escape_string($minimum_salary)
+            );
+
+        }
+
+        if ($industry) {
+            $query .= sprintf("
+                     AND  J.INDUSTRY = '%s'",
+                    mysql_real_escape_string($industry)
+            );
+        }
 
         if (count($position_types) != 0) {
             $query .= " AND ( 0 = 1 ";
@@ -255,6 +315,9 @@ class Database {
 
     }
 
+    /**
+     * Creates a new recruiter account.
+     */
     public function create_recruiter($password, $email, $name,
             $company_name, $phone, $fax, $website, $description) {
 
@@ -297,6 +360,9 @@ class Database {
 
     }
 
+    /**
+     * Creates a new applicant account.
+     */
     public function create_applicant($password, $email, $name,
             $phone, $degree, $experience, $citizenship, $birth, $description) {
 
@@ -341,6 +407,9 @@ class Database {
 
     }
 
+    /**
+     * Modifies an applicant account.
+     */
     public function edit_applicant($user_id, $phone, $degree, $experience,
                                    $citizenship, $birth, $description) {
 
@@ -364,6 +433,13 @@ class Database {
 
     }
 
+    /**
+     * Creates a new job.
+     *
+     * @param $posted_by the id of the recruiter posting the job
+     * @param $title the jod title
+     * @param $position_types [array]
+     */
     public function post_job($posted_by, $title, $description,
                              $industry, $minimum_salary, $test,
                              $minimum_score, $email, $phone,
@@ -665,6 +741,8 @@ class Database {
         return $applications;
 
     }
+
+
 
 }
 
