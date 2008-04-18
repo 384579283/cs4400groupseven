@@ -359,7 +359,7 @@ class Database {
                 mysql_real_escape_string($citizenship),
                 mysql_real_escape_string($birth),
                 mysql_real_escape_string($description),
-                mysql_real_escape_string($user_id),
+                mysql_real_escape_string($user_id)
         ));
 
     }
