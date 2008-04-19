@@ -26,14 +26,3 @@
           AND YEARS_EXPERIENCE >= '<yearsExperience>'
           AND ('<citizenship>' IS NULL OR CITIZENSHIP='<citizenship>');
 
--- Show applicant's detail
-  SELECT  NAME,
-          EMAIL,
-          PHONE,
-          HIGHEST_DEGREE,
-          YEARS_EXPERIENCE,
-          CITIZENSHIP,
-          BIRTH_YEAR,
-          DESCRIPTION
-   FROM  APPLICANT NATURAL JOIN CUSTOMER; 
-

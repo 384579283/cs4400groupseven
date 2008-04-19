@@ -729,6 +729,48 @@ class Database {
     }
 
     /**
+     * Retrieves information about a given applicant.
+     */
+    public function get_applicant($applicant_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  C.NAME,
+                      C.EMAIL,
+                      C.PHONE,
+                      A.HIGHEST_DEGREE,
+                      A.YEARS_EXPERIENCE,
+                      A.CITIZENSHIP,
+                      A.BIRTH_YEAR,
+                      A.DESCRIPTION
+                FROM  APPLICANT A,
+                      CUSTOMER C
+               WHERE  A.USER_ID = C.USER_ID
+                 AND  A.USER_ID = '%s';",
+            mysql_real_escape_string($applicant_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        if (!$row) {
+            return false;
+        }
+
+        $applicant = array(
+            'name' => $row['NAME'],
+            'email' => $row['EMAIL'],
+            'phone' => $row['PHONE'],
+            'degree' => $row['HIGHEST_DEGREE'],
+            'experience' => $row['YEARS_EXPERIENCE'],
+            'citizenship' => $row['CITIZENSHIP'],
+            'birth' => $row['BIRTH_YEAR'],
+            'description' => $row['DESCRIPTION']
+        );
+
+        return $applicant;
+
+    }
+
+    /**
      * Retrieves the company details for a given recruiter.
      */
     public function get_company($recruiter_id) {
