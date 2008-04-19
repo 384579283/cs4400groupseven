@@ -6,12 +6,15 @@ require_once('db.php');
 
 access_applicant();
 
-$checked_position_types = array();
+$lookup_position_type = $db->lookup_position_type();
+
+$lookup_industry = $db->lookup_industry();
 
 if ($_GET['searching']) {
 
+    $checked_position_types = array();
     foreach ($db->lookup_position_type() as $id => $name) {
-        if ($_GET['position_type_' + $id]) {
+        if ($_GET['position_type_' . $id]) {
             $checked_position_types[] = $id;
         }
     }
@@ -20,6 +23,11 @@ if ($_GET['searching']) {
         'industry',
         'title_keywords',
         'minimum_salary');
+
+    $results = $db->search_jobs($industry,
+                                explode(' ', $title_keywords),
+                                $checked_position_types,
+                                $minimum_salary);
 
 }
 
@@ -31,7 +39,8 @@ if ($_GET['searching']) {
     <meta http-equiv="Content-Style-Type" content="text/css"/>
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
-  <body><form action="job_search.php" method="GET">
+  <body>
+  <form action="job_search.php" method="GET">
     <input type="hidden" name="searching" value="true"/>
     <? $tab = 'job'; include('applicant_header.php'); ?>
     <h1>Job Search</h1>
@@ -42,8 +51,12 @@ if ($_GET['searching']) {
           Position type
         </td>
         <td>
-        <? foreach ($db->lookup_position_type() as $id => $name) { ?>
-          <input type="checkbox" name="position_type_<? echo $id; ?>"/>
+        <? foreach ($lookup_position_type as $id => $name) { ?>
+          <input type="checkbox" name="position_type_<? echo $id; ?>"<?
+            if (count($checked_position_types) != 0) {
+              if (in_array($id, $checked_position_types)) { echo ' checked="true"'; }
+            }
+          ?>/>
           <? echo $name; ?><br/>
         <? } ?>
         </td>
@@ -54,12 +67,14 @@ if ($_GET['searching']) {
         </td>
         <td>
           <select name="industry">
-          <? foreach ($db->lookup_industry() as $id => $name) { ?>
-            <option value="<? echo "$id"; ?>">
+          <? foreach ($lookup_industry as $id => $name) { ?>
+            <option value="<? echo "$id"; ?>"<?
+              if ($industry == $id) { echo 'selected="selected"'; }
+            ?>>
               <? echo $name; ?>
             </option>
           <? } ?>
-            <option value="" selected="selected"></option>
+            <option value=""<? if (!$industry) { echo 'selected="selected"'; } ?>></option>
           </select>
         </td>
       </tr>
@@ -68,7 +83,7 @@ if ($_GET['searching']) {
           Keywords in job title
         </td>
         <td>
-          <input type="text" name="title_keywords" />
+          <input type="text" name="title_keywords" value="<? echo $title_keywords; ?>" />
         </td>
       </tr>
       <tr>
@@ -76,7 +91,7 @@ if ($_GET['searching']) {
           Minimum salary
         </td>
         <td>
-          <input type="text" name="minimum_salary" />
+          <input type="text" name="minimum_salary" value="<? echo $minimum_salary; ?>" />
         </td>
       </tr>
       <tr>
@@ -85,6 +100,44 @@ if ($_GET['searching']) {
         </td>
       </tr>
     </table>
-  </form></body>
+  </form>
+<? if ($results) { ?>
+    <h1>Search Results</h1>
+    <table class="box">
+      <tr>
+        <th>Job&nbsp;title</th>
+        <th>Employer</th>
+        <th>Position<br/>type</th>
+        <th>Industry</th>
+        <th>Minumum<br/>salary</th>
+      </tr>
+    <? foreach ($results as $job) { ?>
+      <tr>
+        <td>
+          <a href="view_job.php?job_id=<? echo $job['id']; ?>">
+            <? echo $job['title']; ?>
+          </a>
+        </td>
+        <td>
+          <a href="view_employer.php?recruiter_id=<? echo $job['recruiter_id']; ?>">
+            <? echo $job['employer']; ?>
+          </a>
+        </td>
+        <td style="white-space: nowrap;">
+          <? foreach ($job['position_type'] as $position_type) { ?>
+            <? echo $lookup_position_type[$position_type]; ?><br/>
+          <? } ?>
+        </td>
+        <td>
+          <? echo $lookup_industry[$job['industry']]; ?><br/>
+        </td>
+        <td>
+          <? echo $job['minimum_salary']; ?>
+        </td>
+      </tr>
+    <? } ?>
+    </table>
+<? } ?>
+  </body>
 </html>
 
