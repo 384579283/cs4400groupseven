@@ -269,9 +269,11 @@ class Database {
         }
 
         $query = sprintf("
-              SELECT  J.TITLE,
+              SELECT  J.JOB_ID,
+                      J.TITLE,
+                      R.USER_ID AS RECRUITER_ID,
                       R.COMPANY_NAME AS EMPLOYER,
-                      I.INDUSTRY,
+                      J.INDUSTRY,
                       J.MINIMUM_SALARY
                 FROM  JOB J,
                       RECRUITER R
@@ -301,7 +303,7 @@ class Database {
                 $query .= sprintf("
                      OR  J.JOB_ID IN (SELECT  T.JOB_ID
                                         FROM  JOB_POSITION_TYPE T
-                                       WHERE  T.ID = '%s'",
+                                       WHERE  T.POSITION_TYPE = '%s')",
                     mysql_real_escape_string($type)
                 );
             }
@@ -315,12 +317,30 @@ class Database {
         $search_results = array();
 
         while ($row = mysql_fetch_assoc($result)) {
+
+            $job_id = $row['JOB_ID'];
+
+            $job_position_types = array();
+            $position_type_results = $this->doQuery(sprintf("
+                SELECT  POSITION_TYPE
+                  FROM  JOB_POSITION_TYPE T
+                 WHERE  T.JOB_ID = '%s';",
+                mysql_real_escape_string($job_id)
+            ));
+            while ($position_type_row = mysql_fetch_assoc($position_type_results)) {
+                $job_position_types[] = $position_type_row['POSITION_TYPE'];
+            }
+
             $search_results[] = array(
+                'id' => $job_id,
                 'title' => $row['TITLE'],
+                'recruiter_id' => $row['RECRUITER_ID'],
                 'employer' => $row['EMPLOYER'],
                 'industry' => $row['INDUSTRY'],
-                'minimum_salary' => $row['MINIMUM_SALARY']
+                'minimum_salary' => $row['MINIMUM_SALARY'],
+                'position_type' => $job_position_types
             );
+
         }
 
         return $search_results;
@@ -767,6 +787,37 @@ class Database {
         );
 
         return $applicant;
+
+    }
+
+    public function applications_for_job($job_id) {
+
+        $result = $this->doQuery(sprintf("
+              SELECT  APPLICATION.APPLICATION_ID,
+                      APPLICANT.USER_ID AS APPLICANT_ID,
+                      APPLICANT.NAME AS APPLICANT_NAME,
+                      APPLICATION.STATUS,
+                      APPLICATION.TEST_SCORE
+                FROM  APPLICATION,
+                      CUSTOMER APPLICANT
+               WHERE  APPLICATION.APPLICANT_ID = APPLICANT.USER_ID
+                 AND  APPLICATION.JOB_ID = '%s';",
+            mysql_real_escape_string($job_id)
+        ));
+
+        $applications = array();
+
+        while ($row = mysql_fetch_assoc($result)) {
+            $applications[] = array(
+                'id' => $row['APPLICATION_ID'],
+                'applicant_id' => $row['APPLICANT_ID'],
+                'applicant_name' => $row['APPLICANT_NAME'],
+                'status' => $row['STATUS'],
+                'score' => $row['TEST_SCORE']
+            );
+        }
+
+        return $applications;
 
     }
 
