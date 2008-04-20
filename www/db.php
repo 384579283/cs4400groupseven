@@ -221,19 +221,19 @@ class Database {
     public function admin_login($password) {
 
         $result = $this->doQuery(sprintf("
-              SELECT  A.USER_ID
-                FROM  ADMIN
+              SELECT  ADMIN_ID
+                FROM  ADMINISTRATOR
                WHERE  PASSWORD = '%s';",
             mysql_real_escape_string($password)
         ));
 
-        if (!$result) {
+        $row = mysql_fetch_assoc($result);
+
+        if (!$row) {
             return false;
         }
 
-        $row = mysql_fetch_assoc($result);
-
-        $id = $row['USER_ID'];
+        $id = $row['ADMIN_ID'];
 
         return $id;
 
