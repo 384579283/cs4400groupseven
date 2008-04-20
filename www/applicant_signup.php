@@ -10,11 +10,17 @@ if (register_post_keys('name', 'email', 'password', 'password_retype',
                        'phone', 'degree', 'birth', 'experience',
                        'citizenship', 'description')) {
 
+    $error = array();
+
     if ($password != $password_retype) {
-        $error = "Passwords do not match.";
+        $error[] = "Passwords do not match.";
     }
 
-    if (!$error) {
+    if ($db->customer_email_exists($email)) {
+        $error[] = "The specified email is already in use.";
+    }
+
+    if (count($error) == 0) {
 
         $user_id = $db->create_applicant($password, $email, $name, $phone,
                     $degree, $experience, $citizenship, $birth, $description);
@@ -22,7 +28,7 @@ if (register_post_keys('name', 'email', 'password', 'password_retype',
         if ($user_id) {
             login_applicant($user_id);
         } else {
-            $error = "Failed to add user.";
+            $error[] = "Failed to add user.";
         }
 
     }

@@ -10,11 +10,17 @@ if (register_post_keys('company_name', 'contact_person',
                        'contact_email', 'password', 'password_retype',
                        'phone', 'fax', 'website', 'description')) {
 
+    $error = array();
+
     if ($password != $password_retype) {
-        $error = "Passwords do not match.";
+        $error[] = "Passwords do not match.";
     }
 
-    if (!$error) {
+    if ($db->customer_email_exists($email)) {
+        $error[] = "The specified email is already in use.";
+    }
+
+    if (count($error) == 0) {
 
         $user_id = $db->create_recruiter(
                 $password, $contact_email, $contact_person,
@@ -23,7 +29,7 @@ if (register_post_keys('company_name', 'contact_person',
         if ($user_id) {
             login_recruiter($user_id);
         } else {
-            $error = "Failed to add user.";
+            $error[] = "Failed to add user.";
         }
 
     }
