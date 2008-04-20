@@ -724,7 +724,7 @@ class Database {
             $position_types[] = $row['POSITION_TYPE'];
         }
 
-        $job['position_types'] = $position_types;
+        $job['position_type'] = $position_types;
 
         return $job;
 
@@ -828,8 +828,9 @@ class Database {
 
         $result = $this->doQuery(sprintf("
               SELECT  R.COMPANY_NAME,
+                      C.NAME AS RECRUITER_NAME,
                       C.EMAIL,
-                      C.PHONE,
+                      R.PHONE,
                       R.FAX,
                       R.WEBSITE,
                       R.DESCRIPTION
@@ -848,14 +849,36 @@ class Database {
 
         $company = array(
             'name' => $row['COMPANY_NAME'],
+            'person' => $row['RECRUITER_NAME'],
             'email' => $row['EMAIL'],
             'phone' => $row['PHONE'],
             'fax' => $row['FAX'],
             'website' => $row['WEBSITE'],
-            'description' => $row['DESCRIPTION'],
+            'description' => $row['DESCRIPTION']
         );
 
         return $company;
+
+    }
+
+    public function get_application_id($applicant_id, $job_id) {
+
+        $result = $this->doQuery(sprintf("
+            SELECT  APPLICATION_ID
+              FROM  APPLICATION
+             WHERE  APPLICANT_ID = '%s'
+               AND  JOB_ID = '%s'",
+            mysql_real_escape_string($applicant_id),
+            mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        if (!$row) {
+            return false;
+        }
+
+        return $row['APPLICATION_ID'];
 
     }
 
@@ -925,6 +948,18 @@ class Database {
         }
 
         return $applications;
+
+    }
+
+    public function industry_report($start_date) {
+
+        // TODO
+
+    }
+
+    public function salary_report($start_date) {
+
+        // TODO
 
     }
 

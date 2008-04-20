@@ -54,7 +54,9 @@ if ($_GET['searching']) {
         <? foreach ($lookup_position_type as $id => $name) { ?>
           <input type="checkbox" name="position_type_<? echo $id; ?>"<?
             if (count($checked_position_types) != 0) {
-              if (in_array($id, $checked_position_types)) { echo ' checked="true"'; }
+              if (in_array($id, $checked_position_types)) {
+                echo ' checked="true"';
+              }
             }
           ?>/>
           <? echo $name; ?><br/>
@@ -83,7 +85,9 @@ if ($_GET['searching']) {
           Keywords in job title
         </td>
         <td>
-          <input type="text" name="title_keywords" value="<? echo $title_keywords; ?>" />
+          <input type="text"
+                 name="title_keywords"
+                 value="<? echo $title_keywords; ?>" />
         </td>
       </tr>
       <tr>
@@ -91,7 +95,9 @@ if ($_GET['searching']) {
           Minimum salary
         </td>
         <td>
-          <input type="text" name="minimum_salary" value="<? echo $minimum_salary; ?>" />
+          <input type="text"
+                 name="minimum_salary"
+                 value="<? echo $minimum_salary; ?>" />
         </td>
       </tr>
       <tr>

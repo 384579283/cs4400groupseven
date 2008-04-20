@@ -1,178 +1,250 @@
--- Create citizenship lookup table
-CREATE TABLE CITIZENSHIP_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+-- phpMyAdmin SQL Dump
+-- version 2.11.3deb1ubuntu1
+-- http://www.phpmyadmin.net
+--
+-- Host: localhost
+-- Generation Time: Apr 20, 2008 at 03:36 PM
+-- Server version: 5.0.51
+-- PHP Version: 5.2.4-2ubuntu5
 
--- Populate citizenship lookup table
-INSERT INTO CITIZENSHIP_LU (ID, NAME)
-  VALUES (1, 'United States'),
-         (2, 'Canada'),
-         (3, 'Mexico'),
-         (4, 'Other');
+SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
 
--- Create position type lookup table
-CREATE TABLE POSITION_TYPE_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+--
+-- Database: `CareerWorks`
+--
 
--- Populate position type lookup table
-INSERT INTO POSITION_TYPE_LU (ID, NAME)
-  VALUES (1, 'Full time'),
-         (2, 'Part time'),
-         (3, 'Internship'),
-         (4, 'Temporary');
+-- --------------------------------------------------------
 
--- Create industry lookup table
-CREATE TABLE INDUSTRY_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+--
+-- Table structure for table `ADMINISTRATOR`
+--
 
--- Populate industry lookup table
-INSERT INTO INDUSTRY_LU (ID, NAME)
-  VALUES (1, 'Accounting'),
-         (2, 'Computers'),
-         (3, 'Education'),
-         (4, 'Fashion'),
-         (5, 'Insurance');
+CREATE TABLE `ADMINISTRATOR` (
+  `ADMIN_ID` int(11) NOT NULL auto_increment,
+  `PASSWORD` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ADMIN_ID`),
+  UNIQUE KEY `PASSWORD` (`PASSWORD`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Create degree lookup table
-CREATE TABLE DEGREE_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+-- --------------------------------------------------------
 
--- Populate degree lookup table
-INSERT INTO DEGREE_LU (ID, NAME)
-  VALUES (1, 'High School or below'),
-         (2, 'Bachelor'),
-         (3, 'Master'),
-         (4, 'PhD');
+--
+-- Table structure for table `APPLICANT`
+--
 
--- Create application status lookup table
-CREATE TABLE APPLICATION_STATUS_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+CREATE TABLE `APPLICANT` (
+  `USER_ID` int(11) NOT NULL,
+  `PHONE` char(10) default NULL,
+  `HIGHEST_DEGREE` int(11) default NULL,
+  `YEARS_EXPERIENCE` int(11) default NULL,
+  `CITIZENSHIP` int(11) default NULL,
+  `BIRTH_YEAR` int(11) default NULL,
+  `DESCRIPTION` varchar(500) default NULL,
+  PRIMARY KEY  (`USER_ID`),
+  KEY `CITIZENSHIP` (`CITIZENSHIP`),
+  KEY `HIGHEST_DEGREE` (`HIGHEST_DEGREE`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Populate application status lookup table
-INSERT INTO APPLICATION_STATUS_LU (ID, NAME)
-  VALUES (1, 'In test process'),
-         (2, 'In interview process'),
-         (3, 'In decision process'),
-         (4, 'Declined'),
-         (5, 'Accepted');
+-- --------------------------------------------------------
 
--- Create test type lookup table
-CREATE TABLE TEST_TYPE_LU (
-  ID    INT          NOT NULL,
-  NAME  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ID)
-);
+--
+-- Table structure for table `APPLICATION`
+--
 
--- Populate test type lookup table
-INSERT INTO TEST_TYPE_LU (ID, NAME)
-  VALUES (1, 'GRE'),
-         (2, 'GMAT'),
-         (3, 'MCAT'),
-         (4, 'STAR'),
-         (5, 'CERT');
+CREATE TABLE `APPLICATION` (
+  `APPLICATION_ID` int(11) NOT NULL auto_increment,
+  `APPLICANT_ID` int(11) NOT NULL,
+  `JOB_ID` int(11) NOT NULL,
+  `TEST_SCORE` int(11) default NULL,
+  `STATUS` int(11) NOT NULL default '1',
+  `OPEN_DATE` date NOT NULL,
+  `CLOSE_DATE` date default NULL,
+  PRIMARY KEY  (`APPLICATION_ID`),
+  UNIQUE KEY `APPLICANT_ID` (`APPLICANT_ID`,`JOB_ID`),
+  KEY `STATUS` (`STATUS`),
+  KEY `JOB_ID` (`JOB_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Create administrator table
-CREATE TABLE ADMINISTRATOR (
-  ADMIN_ID  INT          NOT NULL  AUTO_INCREMENT,
-  PASSWORD  VARCHAR(32)  NOT NULL,
-  PRIMARY KEY(ADMIN_ID)
-);
+-- --------------------------------------------------------
 
--- Create customer table
-CREATE TABLE CUSTOMER (
-  USER_ID      INT           NOT NULL  AUTO_INCREMENT,
-  PASSWORD     VARCHAR(32)   NOT NULL,
-  EMAIL        VARCHAR(220)  NOT NULL,
-  NAME         VARCHAR(255)  NOT NULL,
-  PRIMARY KEY(USER_ID)
-);
+--
+-- Table structure for table `APPLICATION_STATUS_LU`
+--
 
--- Create recruiter table
-CREATE TABLE RECRUITER (
-  USER_ID       INT           NOT NULL,
-  COMPANY_NAME  VARCHAR(255)  NOT NULL,
-  PHONE         CHAR(10),
-  FAX           CHAR(10),
-  WEBSITE       VARCHAR(255),
-  DESCRIPTION   VARCHAR(500),
-  PRIMARY KEY(USER_ID),
-  FOREIGN KEY(USER_ID)      REFERENCES CAREER_USER(USER_ID)
-                            ON DELETE CASCADE ON UPDATE CASCADE
-);
+CREATE TABLE `APPLICATION_STATUS_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Create applicant table
-CREATE TABLE APPLICANT (
-  USER_ID           INT           NOT NULL,
-  PHONE             CHAR(10),
-  HIGHEST_DEGREE    INT,
-  YEARS_EXPERIENCE  INT,
-  CITIZENSHIP       VARCHAR(255),
-  BIRTH_YEAR        INT,
-  DESCRIPTION       VARCHAR(500),
-  PRIMARY KEY(USER_ID),
-  FOREIGN KEY(USER_ID)        REFERENCES CAREER_USER(USER_ID)
-                              ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY(HIGHEST_DEGREE) REFERENCES DEGREE(ID)
-);
+-- --------------------------------------------------------
 
--- Create application table
-CREATE TABLE APPLICATION (
-  APPLICATION_ID  INT      NOT NULL  AUTO_INCREMENT,
-  APPLICANT_ID    INT      NOT NULL,
-  JOB_ID          INT      NOT NULL,
-  TEST_SCORE      INT,
-  STATUS          INT      NOT NULL  DEFAULT '1',
-  OPEN_DATE       DATE     NOT NULL,
-  CLOSE_DATE      DATE,
-  PRIMARY KEY(APPLICATION_ID),
-  FOREIGN KEY(APPLICANT_ID) REFERENCES APPLICANT(USER_ID)
-                            ON DELETE CASCADE ON UPDATE CASCADE,
-  FOREIGN KEY(JOB_ID)       REFERENCES JOB(JOB_ID)
-                            ON DELETE CASCADE ON UPDATE CASCADE
-);
+--
+-- Table structure for table `CITIZENSHIP_LU`
+--
 
--- Create job table
-CREATE TABLE JOB (
-  JOB_ID           INT           NOT NULL  AUTO_INCREMENT,
-  POSTED_BY        INT           NOT NULL,
-  POST_DATE        DATE          NOT NULL,
-  TITLE            VARCHAR(255)  NOT NULL,
-  DESCRIPTION      VARCHAR(500),
-  INDUSTRY         INT,
-  MINIMUM_SALARY   INT           NOT NULL,
-  TEST_TYPE        INT,
-  MIN_TEST_SCORE   INT,
-  EMAIL            VARCHAR(220)  NOT NULL,
-  PHONE            CHAR(10)      NOT NULL,
-  FAX              CHAR(10),
-  NUM_POSITIONS    INT,
-  ACTIVE           TINYINT(1)    NOT NULL DEFAULT '1',
-  PRIMARY KEY(JOB_ID),
-  FOREIGN KEY(INDUSTRY)      REFERENCES INDUSTRY_LU(ID),
-  FOREIGN KEY(TEST_TYPE)     REFERENCES TEST_TYPE(ID),
-  FOREIGN KEY(POSTED_BY)     REFERENCES RECRUITER(USER_ID)
-                             ON DELETE CASCADE ON UPDATE CASCADE
-);
+CREATE TABLE `CITIZENSHIP_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
--- Mulivalue position-type attribute for job
-CREATE TABLE JOB_POSITION_TYPE (
-  JOB_ID           INT           NOT NULL,
-  POSITION_TYPE    INT           NOT NULL,
-  FOREIGN KEY(JOB_ID)        REFERENCES POSITION_TYPE_LU(JOB_ID),
-  FOREIGN KEY(POSITION_TYPE) REFERENCES POSITION_TYPE_LU(ID)
-);
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `CUSTOMER`
+--
+
+CREATE TABLE `CUSTOMER` (
+  `USER_ID` int(11) NOT NULL auto_increment,
+  `PASSWORD` varchar(32) NOT NULL,
+  `EMAIL` varchar(220) NOT NULL,
+  `NAME` varchar(255) NOT NULL,
+  PRIMARY KEY  (`USER_ID`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `DEGREE_LU`
+--
+
+CREATE TABLE `DEGREE_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `INDUSTRY_LU`
+--
+
+CREATE TABLE `INDUSTRY_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `JOB`
+--
+
+CREATE TABLE `JOB` (
+  `JOB_ID` int(11) NOT NULL auto_increment,
+  `POSTED_BY` int(11) NOT NULL,
+  `POST_DATE` date NOT NULL,
+  `TITLE` varchar(255) NOT NULL,
+  `DESCRIPTION` varchar(500) default NULL,
+  `INDUSTRY` int(11) default NULL,
+  `MINIMUM_SALARY` int(11) NOT NULL,
+  `TEST_TYPE` int(11) default NULL,
+  `MIN_TEST_SCORE` int(11) default NULL,
+  `EMAIL` varchar(220) NOT NULL,
+  `PHONE` char(10) NOT NULL,
+  `FAX` char(10) default NULL,
+  `NUM_POSITIONS` int(11) default NULL,
+  `ACTIVE` tinyint(1) NOT NULL default '1',
+  PRIMARY KEY  (`JOB_ID`),
+  KEY `POSTED_BY` (`POSTED_BY`),
+  KEY `INDUSTRY` (`INDUSTRY`),
+  KEY `TEST_TYPE` (`TEST_TYPE`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `JOB_POSITION_TYPE`
+--
+
+CREATE TABLE `JOB_POSITION_TYPE` (
+  `JOB_ID` int(11) NOT NULL,
+  `POSITION_TYPE` int(11) NOT NULL,
+  KEY `JOB_ID` (`JOB_ID`),
+  KEY `POSITION_TYPE` (`POSITION_TYPE`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `POSITION_TYPE_LU`
+--
+
+CREATE TABLE `POSITION_TYPE_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `RECRUITER`
+--
+
+CREATE TABLE `RECRUITER` (
+  `USER_ID` int(11) NOT NULL,
+  `COMPANY_NAME` varchar(255) NOT NULL,
+  `PHONE` char(10) default NULL,
+  `FAX` char(10) default NULL,
+  `WEBSITE` varchar(255) default NULL,
+  `DESCRIPTION` varchar(500) default NULL,
+  PRIMARY KEY  (`USER_ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `TEST_TYPE_LU`
+--
+
+CREATE TABLE `TEST_TYPE_LU` (
+  `ID` int(11) NOT NULL,
+  `NAME` varchar(32) NOT NULL,
+  PRIMARY KEY  (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `APPLICANT`
+--
+ALTER TABLE `APPLICANT`
+  ADD CONSTRAINT `APPLICANT_ibfk_9` FOREIGN KEY (`CITIZENSHIP`) REFERENCES `CITIZENSHIP_LU` (`ID`),
+  ADD CONSTRAINT `APPLICANT_ibfk_7` FOREIGN KEY (`USER_ID`) REFERENCES `CUSTOMER` (`USER_ID`),
+  ADD CONSTRAINT `APPLICANT_ibfk_8` FOREIGN KEY (`HIGHEST_DEGREE`) REFERENCES `DEGREE_LU` (`ID`);
+
+--
+-- Constraints for table `APPLICATION`
+--
+ALTER TABLE `APPLICATION`
+  ADD CONSTRAINT `APPLICATION_ibfk_2` FOREIGN KEY (`APPLICANT_ID`) REFERENCES `APPLICANT` (`USER_ID`),
+  ADD CONSTRAINT `APPLICATION_ibfk_3` FOREIGN KEY (`JOB_ID`) REFERENCES `JOB` (`JOB_ID`),
+  ADD CONSTRAINT `APPLICATION_ibfk_4` FOREIGN KEY (`STATUS`) REFERENCES `APPLICATION_STATUS_LU` (`ID`);
+
+--
+-- Constraints for table `JOB`
+--
+ALTER TABLE `JOB`
+  ADD CONSTRAINT `JOB_ibfk_5` FOREIGN KEY (`TEST_TYPE`) REFERENCES `TEST_TYPE_LU` (`ID`),
+  ADD CONSTRAINT `JOB_ibfk_3` FOREIGN KEY (`POSTED_BY`) REFERENCES `RECRUITER` (`USER_ID`),
+  ADD CONSTRAINT `JOB_ibfk_4` FOREIGN KEY (`INDUSTRY`) REFERENCES `INDUSTRY_LU` (`ID`);
+
+--
+-- Constraints for table `JOB_POSITION_TYPE`
+--
+ALTER TABLE `JOB_POSITION_TYPE`
+  ADD CONSTRAINT `JOB_POSITION_TYPE_ibfk_3` FOREIGN KEY (`POSITION_TYPE`) REFERENCES `POSITION_TYPE_LU` (`ID`),
+  ADD CONSTRAINT `JOB_POSITION_TYPE_ibfk_2` FOREIGN KEY (`JOB_ID`) REFERENCES `JOB` (`JOB_ID`);
+
+--
+-- Constraints for table `RECRUITER`
+--
+ALTER TABLE `RECRUITER`
+  ADD CONSTRAINT `RECRUITER_ibfk_1` FOREIGN KEY (`USER_ID`) REFERENCES `CUSTOMER` (`USER_ID`);
 
