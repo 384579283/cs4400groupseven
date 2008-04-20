@@ -19,7 +19,7 @@ body {
   text-align: center;
 }
 
-td {
+td, th {
   text-align: left;
   vertical-align: top;
 }
@@ -50,7 +50,7 @@ h2 {
   padding: .8em;
 }
 
-.box td {
+.box td, .box th {
   padding: .4em;
   text-align: left;
   vertical-align: top;
@@ -58,6 +58,11 @@ h2 {
 
 table.box {
   margin: .8em auto 0 auto;
+}
+
+.infobox th {
+  text-align: right;
+  padding-right: 1.5em;
 }
 
 .error {
