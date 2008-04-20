@@ -142,6 +142,26 @@ class Database {
 
     }
 
+    /**
+     * Returns a boolean indicating whether a customer exists
+     * having the given email address.  Used to ensure a user
+     * can't sign up and attempt to violate the uniqueness constraint.
+     */
+    public function customer_email_exists($email) {
+
+        $result = $this->doQuery(sprintf("
+            SELECT  USER_ID
+              FROM  CUSTOMER
+             WHERE  EMAIL = '%s'",
+            mysql_real_escape_string($email)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return ($row ? true : false);
+
+    }
+
     private function customer_login($table, $email, $password) {
 
         // Fetch the id of the user with this email and password
