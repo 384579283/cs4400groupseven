@@ -2,7 +2,32 @@
 
 session_start();
 
+require_once('functions.php');
+
 require_once('db.php');
+
+if (register_post_keys('name', 'email', 'password', 'password_retype',
+                       'phone', 'degree', 'birth', 'experience',
+                       'citizenship', 'description')) {
+
+    if ($password != $password_retype) {
+        $error = "Passwords do not match.";
+    }
+
+    if (!$error) {
+
+        $user_id = $db->create_applicant($password, $email, $name, $phone,
+                    $degree, $experience, $citizenship, $birth, $description);
+
+        if ($user_id) {
+            login_applicant($user_id);
+        } else {
+            $error = "Failed to add user.";
+        }
+
+    }
+
+}
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
@@ -13,6 +38,7 @@ require_once('db.php');
     <link rel="stylesheet" href="signup.css" type="text/css"/>
   </head>
   <body><form action="applicant_signup.php" method="POST">
+    <? include('error.php'); ?>
     <h1>
       Create an Applicant Account
     </h1>
@@ -22,7 +48,7 @@ require_once('db.php');
           * Name
         </td>
         <td>
-          <input type="text" />
+          <input type="text" name="name" />
         </td>
       </tr>
       <tr>
@@ -30,7 +56,7 @@ require_once('db.php');
           * Email
         </td>
         <td>
-          <input type="text" />
+          <input type="text" name="email" />
         </td>
       </tr>
       <tr>
@@ -38,7 +64,7 @@ require_once('db.php');
           * Choose a password
         </td>
         <td>
-          <input type="password" />
+          <input type="password" name="password" />
         </td>
       </tr>
       <tr>
@@ -46,7 +72,7 @@ require_once('db.php');
           * Re-enter password
         </td>
         <td>
-          <input type="password" />
+          <input type="password" name="password_retype" />
         </td>
       </tr>
       <tr>
@@ -59,7 +85,7 @@ require_once('db.php');
           Phone
         </td>
         <td>
-          <input type="text" />
+          <input type="text" name="phone" />
         </td>
       </tr>
       <tr>
@@ -67,7 +93,7 @@ require_once('db.php');
           Highest degree
         </td>
         <td>
-          <select>
+          <select name="degree">
           <? foreach ($db->lookup_degree() as $id => $name) { ?>
             <option value="<? echo "$id"; ?>">
               <? echo $name; ?>
@@ -82,7 +108,7 @@ require_once('db.php');
           Birth year
         </td>
         <td>
-          <select>
+          <select name="birth">
           <? for ($i = date("Y") - 123; $i <= date("Y"); $i++) { ?>
             <option value="<? echo $i ?>">
               <? echo $i ?>
@@ -97,7 +123,7 @@ require_once('db.php');
           Years of experience
         </td>
         <td>
-          <select>
+          <select name="experience">
           <? for ($i = 80; $i >= 0; $i--) { ?>
             <option value="<? echo $i ?>">
               <? echo $i ?>
@@ -112,7 +138,7 @@ require_once('db.php');
           Citizenship
         </td>
         <td>
-          <select>
+          <select name="citizenship">
           <? foreach ($db->lookup_citizenship() as $id => $name) { ?>
             <option value="<? echo "$id"; ?>">
               <? echo $name; ?>
@@ -127,7 +153,7 @@ require_once('db.php');
           Short description<br />(Not to exceed<br />500 characters)
         </td>
         <td>
-          <textarea></textarea>
+          <textarea name="description"></textarea>
         </td>
       </tr>
       <tr>

@@ -2,6 +2,13 @@
 
 $db = new Database();
 
+function value_or_null($str) {
+    if ($str === '' || $str === null) {
+        return "NULL";
+    }
+    return "'".mysql_real_escape_string($str)."'";
+}
+
 class Database {
 
     private $dblink;
@@ -423,19 +430,20 @@ class Database {
         }
 
         // Insert the applicant record
-        $this->doQuery(sprintf("
+        $query = sprintf("
               INSERT  INTO APPLICANT (USER_ID, PHONE, HIGHEST_DEGREE,
                                       YEARS_EXPERIENCE, CITIZENSHIP,
                                       BIRTH_YEAR, DESCRIPTION)
-              VALUES  ('%s', '%s', '%s', '%s', '%s', '%s', '%s');",
+              VALUES  ('%s', %s, %s, %s, %s, %s, %s);",
             $id,
-            mysql_real_escape_string($phone),
-            mysql_real_escape_string($degree),
-            mysql_real_escape_string($experience),
-            mysql_real_escape_string($citizenship),
-            mysql_real_escape_string($birth),
-            mysql_real_escape_string($description)
-        ));
+            value_or_null($phone),
+            value_or_null($degree),
+            value_or_null($experience),
+            value_or_null($citizenship),
+            value_or_null($birth),
+            value_or_null($description)
+        );
+        $this->doQuery($query);
 
         if (mysql_error()) {
             $this->transaction_rollback();
@@ -756,7 +764,7 @@ class Database {
         $result = $this->doQuery(sprintf("
               SELECT  C.NAME,
                       C.EMAIL,
-                      C.PHONE,
+                      A.PHONE,
                       A.HIGHEST_DEGREE,
                       A.YEARS_EXPERIENCE,
                       A.CITIZENSHIP,
