@@ -41,6 +41,7 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
           <a href="job_update.php?job_id=<? echo $job['id']; ?>">
             <? echo $job['title']; ?></td>
           </a>
+        </td>
         <td style="text-align: center;">
           <? echo $job['status_test']; ?>
         </td>
@@ -63,7 +64,7 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
     <? } ?>
       <tr>
         <td colspan="9">
-          <input type="button" value="Close selected jobs"/>
+          <input type="button" value="Close selected jobs" class="btn"/>
         </td>
       </tr>
     </table>

@@ -914,8 +914,10 @@ class Database {
     public function get_applications_for_applicant($applicant_id, $show_all) {
 
         $query = sprintf("
-              SELECT  J.TITLE,
+              SELECT  J.JOB_ID,
+                      J.TITLE,
                       R.COMPANY_NAME,
+                      R.USER_ID AS RECRUITER_ID,
                       A.OPEN_DATE,
                       A.STATUS
                 FROM  JOB J,
@@ -929,20 +931,22 @@ class Database {
 
         if (!$show_all) {
             $query .= "
-                 AND  A.CLOSE_DATE = NULL";
+                 AND  A.CLOSE_DATE IS NULL";
         }
 
         $query .= ";";
 
-        $result = $this->doQuery();
+        $result = $this->doQuery($query);
 
         $applications = array();
 
         while ($row = mysql_fetch_assoc($result)) {
             $applications[] = array(
+                'id' => $row['JOB_ID'],
                 'title' => $row['TITLE'],
+                'recruiter_id' => $row['RECRUITER_ID'],
                 'company' => $row['COMPANY_NAME'],
-                'date_applied' => $row['OPEN_DATE'],
+                'date_applied' => strtotime($row['OPEN_DATE']),
                 'status' => $row['STATUS']
             );
         }
