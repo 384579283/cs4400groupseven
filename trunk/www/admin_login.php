@@ -7,7 +7,7 @@ require_once('functions.php');
 require_once('db.php');
 
 if (register_post_keys('password')) {
-    $user_id = $db->admin_login($email, $password);
+    $user_id = $db->admin_login($password);
     if ($user_id) {
         login_admin($user_id);
     } else {
@@ -27,6 +27,7 @@ if (register_post_keys('password')) {
     <h1>
       Administrator Sign In
     </h1>
+    <? include('error.php'); ?>
     <table class="box">
       <tr>
         <td>
