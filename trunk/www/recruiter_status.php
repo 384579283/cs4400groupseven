@@ -11,7 +11,6 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
 function checked_jobs() {
     $jobs = array();
     foreach ($_POST as $key => $value) {
-        echo $key;
         if (strpos($key, 'job_') === 0) {
             $jobs[] = str_replace('job_', '', $key);
         }
