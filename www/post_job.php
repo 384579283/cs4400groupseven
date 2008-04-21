@@ -85,7 +85,7 @@ if (register_post_keys('title', 'positions', 'industry',
       </tr>
       <tr>
         <td>
-          Number of positions
+          * Number of positions
         </td>
         <td>
           <select name="positions">
@@ -119,7 +119,8 @@ if (register_post_keys('title', 'positions', 'industry',
         </td>
         <td>
         <? foreach ($db->lookup_position_type() as $id => $name) { ?>
-          <input type="checkbox" name="position_type_<? echo $id; ?>"/>
+          <input type="checkbox" class="chk"
+                 name="position_type_<? echo $id; ?>"/>
           <? echo $name; ?><br/>
         <? } ?>
         </td>

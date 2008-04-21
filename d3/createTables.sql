@@ -1,14 +1,3 @@
--- phpMyAdmin SQL Dump
--- version 2.11.3deb1ubuntu1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: Apr 20, 2008 at 03:36 PM
--- Server version: 5.0.51
--- PHP Version: 5.2.4-2ubuntu5
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
-
 --
 -- Database: `CareerWorks`
 --
@@ -24,7 +13,7 @@ CREATE TABLE `ADMINISTRATOR` (
   `PASSWORD` varchar(32) NOT NULL,
   PRIMARY KEY  (`ADMIN_ID`),
   UNIQUE KEY `PASSWORD` (`PASSWORD`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -63,7 +52,7 @@ CREATE TABLE `APPLICATION` (
   UNIQUE KEY `APPLICANT_ID` (`APPLICANT_ID`,`JOB_ID`),
   KEY `STATUS` (`STATUS`),
   KEY `JOB_ID` (`JOB_ID`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
 
@@ -146,7 +135,7 @@ CREATE TABLE `JOB` (
   `EMAIL` varchar(220) NOT NULL,
   `PHONE` char(10) NOT NULL,
   `FAX` char(10) default NULL,
-  `NUM_POSITIONS` int(11) default NULL,
+  `NUM_POSITIONS` int(11) NOT NULL default '0',
   `ACTIVE` tinyint(1) NOT NULL default '1',
   PRIMARY KEY  (`JOB_ID`),
   KEY `POSTED_BY` (`POSTED_BY`),
@@ -231,9 +220,9 @@ ALTER TABLE `APPLICATION`
 -- Constraints for table `JOB`
 --
 ALTER TABLE `JOB`
-  ADD CONSTRAINT `JOB_ibfk_5` FOREIGN KEY (`TEST_TYPE`) REFERENCES `TEST_TYPE_LU` (`ID`),
   ADD CONSTRAINT `JOB_ibfk_3` FOREIGN KEY (`POSTED_BY`) REFERENCES `RECRUITER` (`USER_ID`),
-  ADD CONSTRAINT `JOB_ibfk_4` FOREIGN KEY (`INDUSTRY`) REFERENCES `INDUSTRY_LU` (`ID`);
+  ADD CONSTRAINT `JOB_ibfk_4` FOREIGN KEY (`INDUSTRY`) REFERENCES `INDUSTRY_LU` (`ID`),
+  ADD CONSTRAINT `JOB_ibfk_5` FOREIGN KEY (`TEST_TYPE`) REFERENCES `TEST_TYPE_LU` (`ID`);
 
 --
 -- Constraints for table `JOB_POSITION_TYPE`

@@ -6,6 +6,10 @@ function value_or_null($str) {
     if ($str === '' || $str === null) {
         return "NULL";
     }
+    return value_not_null($str);
+}
+
+function value_not_null($str) {
     return "'".mysql_real_escape_string($str)."'";
 }
 
@@ -549,20 +553,20 @@ class Database {
                     TITLE, DESCRIPTION, INDUSTRY, MINIMUM_SALARY,
                     TEST_TYPE, MIN_TEST_SCORE, EMAIL, PHONE, FAX, 
                     NUM_POSITIONS)
-          VALUES ('%s', '%s', '%s', '%s', '%s', '%s',
-                  '%s', '%s', '%s', '%s', '%s', '%s');",
-                mysql_real_escape_string($posted_by),
+          VALUES (%s, '%s', %s, %s, %s, %s,
+                  %s, %s, %s, %s, %s, %s);",
+                value_not_null($posted_by),
                 date("Y-m-d"),
-                mysql_real_escape_string($title),
-                mysql_real_escape_string($description),
-                mysql_real_escape_string($industry),
-                mysql_real_escape_string($minimum_salary),
-                mysql_real_escape_string($test),
-                mysql_real_escape_string($minimum_score),
-                mysql_real_escape_string($email),
-                mysql_real_escape_string($phone),
-                mysql_real_escape_string($fax),
-                mysql_real_escape_string($positions)
+                value_not_null($title),
+                value_or_null($description),
+                value_or_null($industry),
+                value_not_null($minimum_salary),
+                value_or_null($test),
+                value_or_null($minimum_score),
+                value_not_null($email),
+                value_not_null($phone),
+                value_or_null($fax),
+                value_not_null($positions)
         ));
 
         $id = mysql_insert_id();
