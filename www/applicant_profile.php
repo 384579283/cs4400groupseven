@@ -35,7 +35,7 @@ if (register_post_keys('phone', 'degree', 'birth', 'experience',
   </head>
   <body><form action="applicant_profile.php" method="POST">
     <? $tab = 'profile'; include('applicant_header.php'); ?>
-    <h1>Update Your Profile</h1>
+    <h1>Update Applicant Profile</h1>
     <table class="box">
       <tr>
         <td>

@@ -566,7 +566,7 @@ class Database {
     public function edit_applicant($user_id, $phone, $degree, $experience,
                                    $citizenship, $birth, $description) {
 
-        $this->doQuery(sprintf("
+        $query = sprintf("
               UPDATE  APPLICANT
                  SET  PHONE = '%s',
                       HIGHEST_DEGREE = '%s',
@@ -582,7 +582,9 @@ class Database {
                 mysql_real_escape_string($birth),
                 mysql_real_escape_string($description),
                 mysql_real_escape_string($user_id)
-        ));
+        );
+
+        $this->doQuery($query);
 
     }
 
@@ -592,7 +594,7 @@ class Database {
     public function edit_recruiter($user_id, $phone, $fax,
                                    $website, $description) {
 
-        $this->doQuery(sprintf("
+        $query = sprintf("
               UPDATE  RECRUITER
                  SET  PHONE = '%s',
                       FAX = '%s',
@@ -604,7 +606,9 @@ class Database {
                 mysql_real_escape_string($website),
                 mysql_real_escape_string($description),
                 mysql_real_escape_string($user_id)
-        ));
+        );
+
+        $this->doQuery($query);
 
     }
 
