@@ -131,6 +131,11 @@ input.btn {
   font-weight: bold;
 }
 
+.header .tabSelected a {
+  color: black;
+  text-decoration: none;
+}
+
 .header .tabSpace {
   width: .4em;
 }
