@@ -61,16 +61,16 @@ if ($_POST['close_selected']) {
           </a>
         </td>
         <td style="text-align: center;">
-          <? echo $job['status_test']; ?>
+          <? echo $db->count_waiting_for_test($job['id']); ?>
         </td>
         <td style="text-align: center;">
-          <? echo $job['status_interview']; ?>
+          <? echo $db->count_waiting_for_interview($job['id']); ?>
         </td>
         <td style="text-align: center;">
-          <? echo $job['status_decision']; ?>
+          <? echo $db->count_waiting_for_decision($job['id']); ?>
         </td>
         <td style="text-align: center;">
-          <? echo $job['status_filled']; ?>
+          <? echo $db->count_filled_positions($job['id']); ?>
         </td>
         <td style="text-align: center;">
           <? echo ($job['requested'] != 0 ? $job['requested'] : '-'); ?>
