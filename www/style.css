@@ -80,6 +80,10 @@ input {
   width: 240px;
 }
 
+input.chk {
+  width: auto;
+}
+
 textarea {
   width: 240px;
   height: 80px;

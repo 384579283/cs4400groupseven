@@ -8,6 +8,25 @@ access_recruiter();
 
 $jobs = $db->recruiter_status($_SESSION['user_id']);
 
+function checked_jobs() {
+    $jobs = array();
+    foreach ($_POST as $key => $value) {
+        echo $key;
+        if (strpos($key, 'job_') === 0) {
+            $jobs[] = str_replace('job_', '', $key);
+        }
+    }
+    return $jobs;
+}
+
+if ($_POST['close_selected']) {
+
+    foreach (checked_jobs() as $job_id) {
+        $db->close_job($job_id);
+    }
+
+}
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
@@ -16,7 +35,7 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
     <meta http-equiv="Content-Style-Type" content="text/css"/>
     <link rel="stylesheet" href="style.css" type="text/css"/>
   </head>
-  <body>
+  <body><form action="recruiter_status.php" method="POST">
     <? $tab = 'status'; include('recruiter_header.php'); ?>
     <h1>Status</h1>
     <table class="box" cellpadding="8">
@@ -33,7 +52,7 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
       </tr>
     <? foreach ($jobs as $job) { ?>
       <tr>
-        <td><input type="checkbox" /></td>
+        <td><input type="checkbox" class="chk" name="job_<? echo $job['id']; ?>" /></td>
         <td style="text-align: center;">
           <? echo $job['id']; ?>
         </td>
@@ -64,10 +83,11 @@ $jobs = $db->recruiter_status($_SESSION['user_id']);
     <? } ?>
       <tr>
         <td colspan="9">
-          <input type="button" value="Close selected jobs" class="btn"/>
+          <input type="hidden" name="close_selected" value="true" />
+          <input type="submit" value="Close selected jobs" class="btn" />
         </td>
       </tr>
     </table>
-  </body>
+  </form></body>
 </html>
 
