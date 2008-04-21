@@ -16,7 +16,7 @@ if (register_post_keys('company_name', 'contact_person',
         $error[] = "Passwords do not match.";
     }
 
-    if ($db->customer_email_exists($email)) {
+    if ($db->customer_email_exists($contact_email)) {
         $error[] = "The specified email is already in use.";
     }
 

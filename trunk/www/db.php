@@ -305,7 +305,8 @@ class Database {
                 FROM  JOB J,
                       RECRUITER R
                WHERE  J.POSTED_BY = R.USER_ID
-                 AND  J.TITLE LIKE '%s' ",
+                 AND  J.TITLE LIKE '%s'
+                 AND  J.ACTIVE = '1' ",
             $keyword_string
         );
 
@@ -675,21 +676,24 @@ class Database {
 
         $this->transaction_start();
 
-        // TODO : fetch a list of application IDs for the job
-        $applications = array();
+        $this->doQuery(sprintf("
+            UPDATE  APPLICATION
+               SET  STATUS = '4'
+             WHERE  JOB_ID = '%s'",
+            mysql_real_escape_string($job_id)
+        ));
 
-        foreach ($applications as $application_id) {
-
-            // TODO Decline the application
-
-            if (mysql_error()) {
-                $this->transaction_rollback();
-                return false;
-            }
-
+        if (mysql_error()) {
+            $this->transaction_rollback();
+            return false;
         }
 
-        // TODO Set job.active to false
+        $this->doQuery(sprintf("
+            UPDATE  JOB
+               SET  ACTIVE = '0'
+             WHERE  JOB_ID = '%s'",
+            mysql_real_escape_string($job_id)
+        ));
 
         if (mysql_error()) {
             $this->transaction_rollback();
@@ -1028,7 +1032,7 @@ class Database {
                WHERE  A.JOB_ID = J.JOB_ID
                  AND  J.INDUSTRY = '%s'
                  AND  A.CLOSE_DATE <= '%s-31'
-                 AND  A.STATUS = '4'",
+                 AND  A.STATUS = '5'",
             mysql_real_escape_string($industry),
             mysql_real_escape_string($month)
         ));
@@ -1098,7 +1102,7 @@ class Database {
                WHERE  A.JOB_ID = J.JOB_ID
                  AND  J.MINIMUM_SALARY >= '%s'
                  AND  A.CLOSE_DATE <= '%s-31'
-                 AND  A.STATUS = '4'",
+                 AND  A.STATUS = '5'",
             mysql_real_escape_string($min),
             mysql_real_escape_string($month)
         );
@@ -1113,6 +1117,18 @@ class Database {
         $row = mysql_fetch_row($result);
 
         return $row[0];
+
+    }
+
+    public function change_application_status($application_id, $status) {
+
+        $this->doQuery(sprintf("
+                UPDATE  APPLICATION
+                   SET  STATUS = '%s'
+                 WHERE  APPLICATION_ID = '%s'",
+            mysql_real_escape_string($status),
+            mysql_real_escape_string($application_id)
+        ));
 
     }
 
