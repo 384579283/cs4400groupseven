@@ -622,6 +622,7 @@ class Database {
                      WHERE  STATUS = (  SELECT DISTINCT ID
                                          FROM  APPLICATION_STATUS_LU
                                         WHERE  UPPER(NAME) LIKE '%TEST%'))
+                            AND J.JOB_ID = JOB_ID
                   AS WAITING_FOR_TESTS,
                   -- # waiting for interviews,
                   (  SELECT COUNT(*)
@@ -629,6 +630,7 @@ class Database {
                      WHERE  A.STATUS = (  SELECT DISTINCT ID
                                          FROM  APPLICATION_STATUS_LU
                                         WHERE  UPPER(NAME) LIKE '%INTERVIEW%'))
+                            AND J.JOB_ID = JOB_ID
                   AS WAITING_FOR_INTERVIEWS,
                   --# waiting for decisions,
                   (  SELECT COUNT(*)
@@ -999,8 +1001,10 @@ class Database {
                       JOB J
                WHERE  A.JOB_ID = J.JOB_ID
                  AND  J.INDUSTRY = '%s'
-                 AND  A.OPEN_DATE = '%s-31'",
+                 AND  A.OPEN_DATE >= '%s-01'
+                 AND  A.OPEN_DATE <= '%s-31'",
             mysql_real_escape_string($industry),
+            mysql_real_escape_string($month),
             mysql_real_escape_string($month)
         ));
 
@@ -1055,8 +1059,10 @@ class Database {
                       JOB J
                WHERE  A.JOB_ID = J.JOB_ID
                  AND  J.MINIMUM_SALARY >= '%s'
-                 AND  A.OPEN_DATE = '%s-31' ",
+                 AND  A.OPEN_DATE >= '%s-01'
+                 AND  A.OPEN_DATE <= '%s-31' ",
             mysql_real_escape_string($min),
+            mysql_real_escape_string($month),
             mysql_real_escape_string($month)
         );
 
