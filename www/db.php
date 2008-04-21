@@ -616,36 +616,6 @@ class Database {
           SELECT  J.JOB_ID,
                   J.TITLE,
                   J.POST_DATE,
-                  --# waiting for tests
-                  (  SELECT COUNT(*)
-                      FROM  APPLICATION NATURAL JOIN JOB
-                     WHERE  STATUS = (  SELECT DISTINCT ID
-                                         FROM  APPLICATION_STATUS_LU
-                                        WHERE  UPPER(NAME) LIKE '%TEST%'))
-                            AND J.JOB_ID = JOB_ID
-                  AS WAITING_FOR_TESTS,
-                  -- # waiting for interviews,
-                  (  SELECT COUNT(*)
-                      FROM  APPLICATION A NATURAL JOIN JOB
-                     WHERE  A.STATUS = (  SELECT DISTINCT ID
-                                         FROM  APPLICATION_STATUS_LU
-                                        WHERE  UPPER(NAME) LIKE '%INTERVIEW%'))
-                            AND J.JOB_ID = JOB_ID
-                  AS WAITING_FOR_INTERVIEWS,
-                  --# waiting for decisions,
-                  (  SELECT COUNT(*)
-                      FROM  APPLICATION A NATURAL JOIN JOB
-                     WHERE  A.STATUS = (  SELECT DISTINCT ID
-                                           FROM  APPLICATION_STATUS_LU
-                                          WHERE  UPPER(NAME) LIKE '%DECISION%'))
-                  AS WAITING_FOR_DECISIONS,
-                  --# positions filled
-                  (  SELECT COUNT(*)
-                      FROM  APPLICATION A NATURAL JOIN JOB
-                     WHERE  A.STATUS = (  SELECT DISTINCT ID
-                                           FROM  APPLICATION_STATUS_LU
-                                          WHERE  UPPER(NAME) LIKE '%ACCEPTED%'))
-                  AS POSITIONS_FILLED,
                   J.NUM_POSITIONS,
                   J.POST_DATE
             FROM  JOB J" . sprintf("
@@ -661,15 +631,83 @@ class Database {
                 'id' => $row['JOB_ID'],
                 'title' => $row['TITLE'],
                 'date' => strtotime($row['POST_DATE']),
-                'status_test' => $row['WAITING_FOR_TESTS'],
-                'status_interview' => $row['WAITING_FOR_INTERVIEWS'],
-                'status_decision' => $row['WAITING_FOR_DECISIONS'],
-                'status_filled' => $row['POSITIONS_FILLED'],
                 'requested' => $row['NUM_POSITIONS']
             );
         }
 
         return $jobs;
+
+    }
+
+    public function count_waiting_for_test($job_id) {
+
+        $result = $this->doQuery(sprintf("
+                     SELECT COUNT(*) AS C
+                      FROM  APPLICATION A,
+                            JOB J
+                     WHERE  A.JOB_ID = J.JOB_ID
+                       AND  A.STATUS = '1'
+                       AND  J.JOB_ID = '%s'",
+                mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return $row['C'];
+
+    }
+
+    public function count_waiting_for_interview($job_id) {
+
+        $result = $this->doQuery(sprintf("
+                     SELECT COUNT(*) AS C
+                      FROM  APPLICATION A,
+                            JOB J
+                     WHERE  A.JOB_ID = J.JOB_ID
+                       AND  A.STATUS = '2'
+                       AND  J.JOB_ID = '%s'",
+                mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return $row['C'];
+
+    }
+
+    public function count_waiting_for_decision($job_id) {
+
+        $result = $this->doQuery(sprintf("
+                     SELECT COUNT(*) AS C
+                      FROM  APPLICATION A,
+                            JOB J
+                     WHERE  A.JOB_ID = J.JOB_ID
+                       AND  A.STATUS = '3'
+                       AND  J.JOB_ID = '%s'",
+                mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return $row['C'];
+
+    }
+
+    public function count_filled_positions($job_id) {
+
+        $result = $this->doQuery(sprintf("
+                     SELECT COUNT(*) AS C
+                      FROM  APPLICATION A,
+                            JOB J
+                     WHERE  A.JOB_ID = J.JOB_ID
+                       AND  A.STATUS = '5'
+                       AND  J.JOB_ID = '%s'",
+                mysql_real_escape_string($job_id)
+        ));
+
+        $row = mysql_fetch_assoc($result);
+
+        return $row['C'];
 
     }
 
