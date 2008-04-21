@@ -639,75 +639,46 @@ class Database {
 
     }
 
-    public function count_waiting_for_test($job_id) {
+    private function count_applications_with_status($job_id, $status) {
 
         $result = $this->doQuery(sprintf("
                      SELECT COUNT(*) AS C
                       FROM  APPLICATION A,
                             JOB J
                      WHERE  A.JOB_ID = J.JOB_ID
-                       AND  A.STATUS = '1'
+                       AND  A.STATUS = '%s'
                        AND  J.JOB_ID = '%s'",
+                mysql_real_escape_string($status),
                 mysql_real_escape_string($job_id)
         ));
 
         $row = mysql_fetch_assoc($result);
 
         return $row['C'];
+
+    }
+
+    public function count_waiting_for_test($job_id) {
+
+        return $this->count_applications_with_status($job_id, '1');
 
     }
 
     public function count_waiting_for_interview($job_id) {
 
-        $result = $this->doQuery(sprintf("
-                     SELECT COUNT(*) AS C
-                      FROM  APPLICATION A,
-                            JOB J
-                     WHERE  A.JOB_ID = J.JOB_ID
-                       AND  A.STATUS = '2'
-                       AND  J.JOB_ID = '%s'",
-                mysql_real_escape_string($job_id)
-        ));
-
-        $row = mysql_fetch_assoc($result);
-
-        return $row['C'];
+        return $this->count_applications_with_status($job_id, '2');
 
     }
 
     public function count_waiting_for_decision($job_id) {
 
-        $result = $this->doQuery(sprintf("
-                     SELECT COUNT(*) AS C
-                      FROM  APPLICATION A,
-                            JOB J
-                     WHERE  A.JOB_ID = J.JOB_ID
-                       AND  A.STATUS = '3'
-                       AND  J.JOB_ID = '%s'",
-                mysql_real_escape_string($job_id)
-        ));
-
-        $row = mysql_fetch_assoc($result);
-
-        return $row['C'];
+        return $this->count_applications_with_status($job_id, '3');
 
     }
 
     public function count_filled_positions($job_id) {
 
-        $result = $this->doQuery(sprintf("
-                     SELECT COUNT(*) AS C
-                      FROM  APPLICATION A,
-                            JOB J
-                     WHERE  A.JOB_ID = J.JOB_ID
-                       AND  A.STATUS = '5'
-                       AND  J.JOB_ID = '%s'",
-                mysql_real_escape_string($job_id)
-        ));
-
-        $row = mysql_fetch_assoc($result);
-
-        return $row['C'];
+        return $this->count_applications_with_status($job_id, '5');
 
     }
 
