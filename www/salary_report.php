@@ -44,7 +44,7 @@ $month_options = months_from($earliest_month);
       </select>
     </form>
     <table class="box">
-  <? foreach ($months as $month) { ?>
+  <? foreach ($months as $month) { $a = $b = $c = 0; ?>
       <tr>
         <th style="text-align: left;"><? echo date("F Y", strtotime($month)); ?></th>
         <th style="text-align: center;">New<br/>applications</th>
@@ -57,12 +57,22 @@ $month_options = months_from($earliest_month);
         $fill_pos = $db->salary_filled_positions($range['min'], $range['max'], $month);
     ?>
       <tr>
-        <td style="text-align: left;"><? echo $range['text']; ?></td>
-        <td style="text-align: center;"><? echo $new_apps; ?></td>
-        <td style="text-align: center;"><? echo $total_pos + 0; ?></td>
-        <td style="text-align: center;"><? echo $total_pos - $fill_pos; ?></td>
+        <td style="text-align: left;">
+            <? echo $range['text']; ?></td>
+        <td style="text-align: center;">
+            <? $a += $new_apps; echo $new_apps; ?></td>
+        <td style="text-align: center;">
+            <? $b += $total_pos; echo $total_pos + 0; ?></td>
+        <td style="text-align: center;">
+            <? $c += $total_pos - $fill_pos; echo $total_pos - $fill_pos; ?></td>
       </tr>
     <? } ?>
+      <tr>
+        <td>Total</td>
+        <td style="text-align: center;"><? echo $a; ?></td>
+        <td style="text-align: center;"><? echo $b; ?></td>
+        <td style="text-align: center;"><? echo $c; ?></td>
+      </tr>
   <? } ?>
     </table>
   </body>
