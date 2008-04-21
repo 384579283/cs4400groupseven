@@ -1,5 +1,32 @@
 <?
 
+function months_from($month_str) {
+
+    $months = array();
+
+    $d = explode('-', $month_str);
+    $year = intval($d[0]);
+    $month = intval($d[1]);
+
+    while ($year != date('Y') || $month != date('n')) {
+        if ($month == 13) {
+            $month = 1;
+            $year++;
+        }
+        $m = $year . '-' . str_pad($month, 2, "0", STR_PAD_LEFT);
+        $months[] = $m;
+        $month++;
+    }
+    $months[] = current_month();
+
+    return $months;
+
+}
+
+function current_month() {
+    return date('Y-m');
+}
+
 function format_date($date) {
     return date("M j, Y", $date);
 }
