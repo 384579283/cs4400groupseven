@@ -983,15 +983,136 @@ class Database {
 
     }
 
-    public function industry_report($start_date) {
+    public function industry_new_applications($industry, $month) {
 
-        // TODO
+        $result = $this->doQuery(sprintf("
+              SELECT  COUNT(*)
+                FROM  APPLICATION A,
+                      JOB J
+               WHERE  A.JOB_ID = J.JOB_ID
+                 AND  J.INDUSTRY = '%s'
+                 AND  A.OPEN_DATE = '%s-31'",
+            mysql_real_escape_string($industry),
+            mysql_real_escape_string($month)
+        ));
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
 
     }
 
-    public function salary_report($start_date) {
+    public function industry_total_positions($industry, $month) {
 
-        // TODO
+        $result = $this->doQuery(sprintf("
+              SELECT  SUM(J.NUM_POSITIONS)
+                FROM  JOB J
+               WHERE  J.INDUSTRY = '%s'
+                 AND  J.POST_DATE <= '%s-31'",
+            mysql_real_escape_string($industry),
+            mysql_real_escape_string($month)
+        ));
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
+
+    }
+
+    public function industry_filled_positions($industry, $month) {
+
+         $result = $this->doQuery(sprintf("
+              SELECT  COUNT(*) AS FILLED_POSITIONS
+                FROM  JOB J,
+                      APPLICATION A
+               WHERE  A.JOB_ID = J.JOB_ID
+                 AND  J.INDUSTRY = '%s'
+                 AND  A.CLOSE_DATE <= '%s-31'
+                 AND  A.STATUS = '4'",
+            mysql_real_escape_string($industry),
+            mysql_real_escape_string($month)
+        ));
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
+
+    }
+
+    public function salary_new_applications($min, $max, $month) {
+
+        $query = sprintf("
+              SELECT  COUNT(*)
+                FROM  APPLICATION A,
+                      JOB J
+               WHERE  A.JOB_ID = J.JOB_ID
+                 AND  J.MINIMUM_SALARY >= '%s'
+                 AND  A.OPEN_DATE = '%s-31' ",
+            mysql_real_escape_string($min),
+            mysql_real_escape_string($month)
+        );
+
+        if ($max >= 0) {
+            $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
+                        mysql_real_escape_string($max));
+        }
+
+        $result = $this->doQuery($query);
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
+
+    }
+
+    public function salary_total_positions($min, $max, $month) {
+
+        $query = sprintf("
+              SELECT  SUM(J.NUM_POSITIONS)
+                FROM  JOB J
+               WHERE  J.MINIMUM_SALARY >= '%s'
+                 AND  J.POST_DATE <= '%s-31'",
+            mysql_real_escape_string($min),
+            mysql_real_escape_string($month)
+        );
+
+        if ($max >= 0) {
+            $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
+                        mysql_real_escape_string($max));
+        }
+
+        $result = $this->doQuery($query);
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
+
+    }
+
+    public function salary_filled_positions($min, $max, $month) {
+
+        $query = sprintf("
+              SELECT  COUNT(*) AS FILLED_POSITIONS
+                FROM  JOB J,
+                      APPLICATION A
+               WHERE  A.JOB_ID = J.JOB_ID
+                 AND  J.MINIMUM_SALARY >= '%s'
+                 AND  A.CLOSE_DATE <= '%s-31'
+                 AND  A.STATUS = '4'",
+            mysql_real_escape_string($min),
+            mysql_real_escape_string($month)
+        );
+
+        if ($max >= 0) {
+            $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
+                        mysql_real_escape_string($max));
+        }
+
+        $result = $this->doQuery($query);
+
+        $row = mysql_fetch_row($result);
+
+        return $row[0];
 
     }
 
