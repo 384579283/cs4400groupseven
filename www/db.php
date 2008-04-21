@@ -342,7 +342,8 @@ class Database {
             $query .= ")";
         }
 
-        $query .= ';';
+        $query .= "
+              ORDER BY  J.TITLE ASC;";
 
         $result = $this->doQuery($query);
 
@@ -371,6 +372,79 @@ class Database {
                 'industry' => $row['INDUSTRY'],
                 'minimum_salary' => $row['MINIMUM_SALARY'],
                 'position_type' => $job_position_types
+            );
+
+        }
+
+        return $search_results;
+
+    }
+
+    public function search_applicants($degree, $birth_begin, $birth_end,
+                                      $experience, $citizenship) {
+
+        $query = "
+                SELECT  C.USER_ID,
+                        C.NAME,
+                        A.HIGHEST_DEGREE,
+                        A.BIRTH_YEAR,
+                        A.YEARS_EXPERIENCE,
+                        A.CITIZENSHIP
+                  FROM  CUSTOMER C,
+                        APPLICANT A
+                 WHERE  C.USER_ID = A.USER_ID";
+
+        if ($degree) {
+            $query .= sprintf("
+                   AND  A.HIGHEST_DEGREE >= '%s'",
+                mysql_real_escape_string($degree)
+            );
+        }
+
+        if ($birth_begin) {
+            $query .= sprintf("
+                   AND  A.BIRTH_YEAR >= '%s'",
+                mysql_real_escape_string($birth_begin)
+            );
+        }
+
+        if ($birth_end) {
+            $query .= sprintf("
+                   AND  A.BIRTH_YEAR <= '%s'",
+                mysql_real_escape_string($birth_end)
+            );
+        }
+
+        if ($experience) {
+            $query .= sprintf("
+                   AND  A.EXPERIENCE >= '%s'",
+                mysql_real_escape_string($experience)
+            );
+        }
+
+        if ($citizenship) {
+            $query .= sprintf("
+                   AND  A.CITIZENSHIP = '%s'",
+                mysql_real_escape_string($citizenship)
+            );
+        }
+
+        $query .= "
+              ORDER BY  C.NAME ASC;";
+
+        $result = $this->doQuery($query);
+
+        $search_results = array();
+
+        while ($row = mysql_fetch_assoc($result)) {
+
+            $search_results[] = array(
+                'id' => $row['USER_ID'],
+                'name' => $row['NAME'],
+                'degree' => $row['HIGHEST_DEGREE'],
+                'birth' => $row['BIRTH_YEAR'],
+                'experience' => $row['YEARS_EXPERIENCE'],
+                'citizenship' => $row['CITIZENSHIP']
             );
 
         }
@@ -694,7 +768,8 @@ class Database {
         $this->doQuery(sprintf("
             UPDATE  APPLICATION
                SET  STATUS = '4'
-             WHERE  JOB_ID = '%s'",
+             WHERE  JOB_ID = '%s'
+               AND  STATUS <> '5'",
             mysql_real_escape_string($job_id)
         ));
 

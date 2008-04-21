@@ -24,6 +24,9 @@ if ($_POST['close_selected']) {
         $db->close_job($job_id);
     }
 
+    goto_continue('The selected jobs have been closed.',
+                  'recruiter_status.php');
+
 }
 
 ?>
@@ -36,7 +39,7 @@ if ($_POST['close_selected']) {
   </head>
   <body><form action="recruiter_status.php" method="POST">
     <? $tab = 'status'; include('recruiter_header.php'); ?>
-    <h1>Status</h1>
+    <h1>Jobs Status</h1>
     <table class="box" cellpadding="8">
       <tr>
         <th></th>
@@ -87,6 +90,18 @@ if ($_POST['close_selected']) {
         </td>
       </tr>
     </table>
-  </form></body>
+  </form>
+    <!--<h1>Closed Jobs</h1>
+    <table class="box" cellpadding="8">
+      <tr>
+        <th></th>
+        <th>Job<br/>ID</th>
+        <th>Job&nbsp;title</th>
+        <th>Filled<br/>positions</th>
+        <th>Requested<br/>positions</th>
+        <th>Date<br/>posted</th>
+      </tr>
+    </table>-->
+  </body>
 </html>
 
