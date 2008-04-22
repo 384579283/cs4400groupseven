@@ -1,16 +1,5 @@
 <?php
 
-function value_or_null($str) {
-    if ($str === '' || $str === null) {
-        return "NULL";
-    }
-    return value_not_null($str);
-}
-
-function value_not_null($str) {
-    return "'".mysql_real_escape_string($str)."'";
-}
-
 class Database {
 
     private $dblink;
@@ -51,6 +40,10 @@ class Database {
 
     }
 
+    /*
+     * Executes a query, catching any MySQL errors.  Returns 
+     * resulting set if valid query.
+     */
     private function doQuery($query) {
 
         // Execute the query
@@ -67,6 +60,12 @@ class Database {
 
     }
 
+    /* 
+     * Gets a lookup table from the database, and returns
+     * the table's contents as an array.
+     * 
+     * Degree is an example of a lookup table.
+     */
     private function get_lookup_table($table) {
 
         // Fetch the entire table
@@ -90,7 +89,7 @@ class Database {
     }
 
     /**
-     * Retrives every application status, indexed by id.
+     * Retrieves every application status, indexed by id.
      */
     public function lookup_application_status() {
 
@@ -99,7 +98,7 @@ class Database {
     }
 
     /**
-     * Retrives every citizenship option, indexed by id.
+     * Retrieves every citizenship option, indexed by id.
      */
 
     public function lookup_citizenship() {
@@ -109,7 +108,7 @@ class Database {
     }
 
     /**
-     * Retrives every degree option, indexed by id.
+     * Retrieves every degree option, indexed by id.
      */
     public function lookup_degree() {
 
@@ -118,7 +117,7 @@ class Database {
     }
 
     /**
-     * Retrives every industry, indexed by id.
+     * Retrieves every industry, indexed by id.
      */
     public function lookup_industry() {
 
@@ -127,7 +126,7 @@ class Database {
     }
 
     /**
-     * Retrives every job position type, indexed by id.
+     * Retrieves every job position type, indexed by id.
      */
     public function lookup_position_type() {
 
@@ -136,7 +135,7 @@ class Database {
     }
 
     /**
-     * Retrives every test type, indexed by id.
+     * Retrieves every test type, indexed by id.
      */
     public function lookup_test_type() {
 
@@ -163,7 +162,13 @@ class Database {
         return ($row ? true : false);
 
     }
-
+    
+    /*
+     * A utility function to determine whether a customer login is valid.
+     * On valid customer login, returns a corresponding user id.
+     *
+     * 
+     */
     private function customer_login($table, $email, $password) {
 
         // Fetch the id of the user with this email and password
@@ -378,6 +383,15 @@ class Database {
 
     }
 
+    /**
+     * Applicant search.
+     *
+     * @param $degree (optional)
+     * @param $birth_begin (optional)
+     * @param $birth_end (optional)
+     * @param $experience (optional)
+     * @param $citizenship (optional)
+     */
     public function search_applicants($degree, $birth_begin, $birth_end,
                                       $experience, $citizenship) {
 
@@ -451,6 +465,9 @@ class Database {
 
     }
 
+    /**
+     * Creates a new customer account.
+     */
     private function create_customer($password, $email, $name) {
 
         $this->doQuery(sprintf("
@@ -734,24 +751,36 @@ class Database {
 
     }
 
+    /**
+     * Returns the number of applicants waiting for a test per particular job.
+     */
     public function count_waiting_for_test($job_id) {
 
         return $this->count_applications_with_status($job_id, '1');
 
     }
 
+    /**
+     * Returns the number of applicants waiting for an interview per particular job.
+     */
     public function count_waiting_for_interview($job_id) {
 
         return $this->count_applications_with_status($job_id, '2');
 
     }
 
+    /**
+     * Returns the number of applicants waiting for a decision per particular job.
+     */
     public function count_waiting_for_decision($job_id) {
 
         return $this->count_applications_with_status($job_id, '3');
 
     }
 
+    /**
+     * Returns the number of filled positions.
+     */
     public function count_filled_positions($job_id) {
 
         return $this->count_applications_with_status($job_id, '5');
@@ -914,6 +943,9 @@ class Database {
 
     }
 
+    /**
+     * Returns all applications matching this job id.
+     */
     public function applications_for_job($job_id) {
 
         $result = $this->doQuery(sprintf("
@@ -985,6 +1017,9 @@ class Database {
 
     }
 
+    /**
+     * Retrieves the application id associated with this applicant and job.
+     */
     public function get_application_id($applicant_id, $job_id) {
 
         $result = $this->doQuery(sprintf("
@@ -1079,6 +1114,9 @@ class Database {
 
     }
 
+    /**
+     * Returns the number of new applications for jobs within the given industry and month.
+     */
     public function industry_new_applications($industry, $month) {
 
         $result = $this->doQuery(sprintf("
@@ -1100,6 +1138,9 @@ class Database {
 
     }
 
+    /**
+     * Returns the total number of positions per given industry and month.
+     */
     public function industry_total_positions($industry, $month) {
 
         $result = $this->doQuery(sprintf("
@@ -1117,6 +1158,9 @@ class Database {
 
     }
 
+    /**
+     * Returns the number of filled positions per industry per month.
+     */
     public function industry_filled_positions($industry, $month) {
 
          $result = $this->doQuery(sprintf("
@@ -1137,6 +1181,9 @@ class Database {
 
     }
 
+    /**
+     * Returns all new jobs within a particular month and salary range.
+     */
     public function salary_new_applications($min, $max, $month) {
 
         $query = sprintf("
@@ -1152,6 +1199,7 @@ class Database {
             mysql_real_escape_string($month)
         );
 
+        //unbounded salaray if max is less than 0
         if ($max >= 0) {
             $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
                         mysql_real_escape_string($max));
@@ -1162,9 +1210,11 @@ class Database {
         $row = mysql_fetch_row($result);
 
         return $row[0];
-
     }
 
+    /*
+     * Returns total positions within a particular month and salary range.
+     */
     public function salary_total_positions($min, $max, $month) {
 
         $query = sprintf("
@@ -1176,6 +1226,7 @@ class Database {
             mysql_real_escape_string($month)
         );
 
+        //unbounded salaray if max is less than 0
         if ($max >= 0) {
             $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
                         mysql_real_escape_string($max));
@@ -1189,6 +1240,9 @@ class Database {
 
     }
 
+    /*
+     * Returns the number of filled positions with a particular month and salary range.
+     */
     public function salary_filled_positions($min, $max, $month) {
 
         $query = sprintf("
@@ -1202,7 +1256,8 @@ class Database {
             mysql_real_escape_string($min),
             mysql_real_escape_string($month)
         );
-
+    
+        //unbounded salaray if max is less than 0
         if ($max >= 0) {
             $query .= sprintf("AND J.MINIMUM_SALARY <= '%s'",
                         mysql_real_escape_string($max));
@@ -1216,6 +1271,9 @@ class Database {
 
     }
 
+    /*
+     * Changes a particular application's status.
+     */
     public function change_application_status($application_id, $status) {
 
         $this->doQuery(sprintf("

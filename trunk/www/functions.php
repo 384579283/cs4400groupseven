@@ -250,4 +250,15 @@ function register_optional_get_keys() {
     return register_optional_keys($_GET, $args);
 }
 
+function value_or_null($str) {
+    if ($str === '' || $str === null) {
+        return "NULL";
+    }
+    return value_not_null($str);
+}
+
+function value_not_null($str) {
+    return "'".mysql_real_escape_string($str)."'";
+}
+
 ?>
