@@ -39,7 +39,7 @@ if (register_post_keys('phone', 'fax', 'website', 'description')) {
           Phone
         </td>
         <td>
-          <input type="text" name="phone" value="<? echo $phone; ?>" />
+          <input type="text" name="phone" value="<? echo $phone; ?>" maxlength="10" />
         </td>
       </tr>
       <tr>

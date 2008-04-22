@@ -40,7 +40,7 @@ if (register_post_keys('phone', 'degree', 'birth', 'experience',
           Phone
         </td>
         <td>
-          <input type="text" name="phone" value="<? echo $phone; ?>" />
+          <input type="text" name="phone" value="<? echo $phone; ?>" maxlength="10" />
         </td>
       </tr>
       <tr>

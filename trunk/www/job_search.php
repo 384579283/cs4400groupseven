@@ -56,7 +56,7 @@ if ($_GET['searching']) {
                 echo ' checked="true"';
               }
             }
-          ?>/>
+          ?> class="chk"/>
           <? echo $name; ?><br/>
         <? } ?>
         </td>

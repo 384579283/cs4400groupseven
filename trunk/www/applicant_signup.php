@@ -87,7 +87,7 @@ if (register_post_keys('name', 'email', 'password', 'password_retype',
           Phone
         </td>
         <td>
-          <input type="text" name="phone" />
+          <input type="text" name="phone" maxlength="10" />
         </td>
       </tr>
       <tr>

@@ -8,6 +8,18 @@ if (register_post_keys('company_name', 'contact_person',
 
     $error = array();
 
+    if (!$company_name) {
+        $error[] = "Company name is required.";
+    }
+
+    if (!$contact_person) {
+        $error[] = "Contact person is required.";
+    }
+
+    if (!$contact_email) {
+        $error[] = "Contact email is required.";
+    }
+
     if ($password != $password_retype) {
         $error[] = "Passwords do not match.";
     }
@@ -100,7 +112,7 @@ if (register_post_keys('company_name', 'contact_person',
           Phone
         </td>
         <td>
-          <input type="text" value="<? echo $phone; ?>" name="phone" />
+          <input type="text" value="<? echo $phone; ?>" name="phone" maxlength="10" />
         </td>
       </tr>
       <tr>
@@ -108,7 +120,7 @@ if (register_post_keys('company_name', 'contact_person',
           Fax
         </td>
         <td>
-          <input type="text" value="<? echo $fax; ?>" name="fax" />
+          <input type="text" value="<? echo $fax; ?>" name="fax" maxlength="10" />
         </td>
       </tr>
       <tr>

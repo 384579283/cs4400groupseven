@@ -5,3 +5,8 @@ Session variables:
     recruiter   true iff the logged-in user is a recruiter
     admin       true iff the logged-in user is an administrator
 
+Architecture notes:
+    Each page imports lib.php, which includes functions.php
+    and db.php, and does some initial setup (connects to the
+    database, starts the session).
+
