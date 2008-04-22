@@ -1,10 +1,6 @@
 <?
 
-session_start();
-
-require_once('functions.php');
-
-require_once('db.php');
+require_once('lib.php');
 
 if (register_post_keys('email', 'password')) {
     $user_id = $db->applicant_login($email, $password);

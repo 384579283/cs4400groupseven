@@ -1,7 +1,5 @@
 <?php
 
-$db = new Database();
-
 function value_or_null($str) {
     if ($str === '' || $str === null) {
         return "NULL";

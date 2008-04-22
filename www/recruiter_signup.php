@@ -1,10 +1,6 @@
 <?
 
-session_start();
-
-require_once('functions.php');
-
-require_once('db.php');
+require_once('lib.php');
 
 if (register_post_keys('company_name', 'contact_person',
                        'contact_email', 'password', 'password_retype',
