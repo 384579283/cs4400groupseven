@@ -1,8 +1,6 @@
 <?
 
-require_once('functions.php');
-
-require_once('db.php');
+require_once('lib.php');
 
 access_recruiter();
 

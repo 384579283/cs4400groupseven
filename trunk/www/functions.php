@@ -1,5 +1,34 @@
 <?
 
+function stripslashes_deep($value) {
+    $value = is_array($value)
+              ? array_map('stripslashes_deep', $value)
+              : stripslashes($value);
+
+    return $value;
+}
+
+function kill_magic_quotes() {
+
+    $magic_quotes =
+    (
+        (
+              function_exists("get_magic_quotes_gpc")
+           && get_magic_quotes_gpc()
+        ) || (
+              ini_get('magic_quotes_sybase')
+           && strtolower(ini_get('magic_quotes_sybase')) != "off"
+        )
+    );
+
+    if ($magic_quotes) {
+        $_GET = stripslashes_deep($_GET);
+        $_POST = stripslashes_deep($_POST);
+        $_COOKIE = stripslashes_deep($_COOKIE);
+    }
+
+}
+
 function months_from($month_str) {
 
     $months = array();

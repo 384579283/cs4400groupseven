@@ -1,4 +1,4 @@
-<? require_once('db.php'); ?>
+<? require_once('lib.php'); ?>
 <table class="header" cellspacing="0">
   <tr>
     <td class="hello">
