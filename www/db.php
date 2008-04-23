@@ -583,19 +583,19 @@ class Database {
 
         $query = sprintf("
               UPDATE  APPLICANT
-                 SET  PHONE = '%s',
-                      HIGHEST_DEGREE = '%s',
-                      YEARS_EXPERIENCE = '%s',
-                      CITIZENSHIP = '%s',
-                      BIRTH_YEAR = '%s',
-                      DESCRIPTION = '%s'
+                 SET  PHONE = %s,
+                      HIGHEST_DEGREE = %s,
+                      YEARS_EXPERIENCE = %s,
+                      CITIZENSHIP = %s,
+                      BIRTH_YEAR = %s,
+                      DESCRIPTION = %s
                WHERE  USER_ID = '%s';",
-                mysql_real_escape_string($phone),
-                mysql_real_escape_string($degree),
-                mysql_real_escape_string($experience),
-                mysql_real_escape_string($citizenship),
-                mysql_real_escape_string($birth),
-                mysql_real_escape_string($description),
+                value_or_null($phone),
+                value_or_null($degree),
+                value_or_null($experience),
+                value_or_null($citizenship),
+                value_or_null($birth),
+                value_or_null($description),
                 mysql_real_escape_string($user_id)
         );
 
